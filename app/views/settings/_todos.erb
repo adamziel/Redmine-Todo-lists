@@ -1,0 +1,20 @@
+<% statuses = IssueStatus.all().map do |status| [status.id, status.name] end %>
+<% statuses_hash = Hash[statuses.each_slice(2).to_a]  %>
+
+<p>
+  <label><%= l(:label_todo_list_uncompleted_todo_status) %></label>
+  <select name="settings[uncompleted_todo_status]">
+    <% for k,v in statuses %>
+      <option value="<%=k%>" <%= k.to_s == @settings[:uncompleted_todo_status].to_s ? 'selected="true"':''%>><%=v%></option>
+    <% end %>
+  </select>
+</p>
+
+<p>
+  <label><%= l(:label_todo_list_completed_todo_status) %></label>
+  <select name="settings[completed_todo_status]">
+    <% for k,v in statuses %>
+        <option value="<%=k%>" <%= k.to_s == @settings[:completed_todo_status].to_s ? 'selected="true"':''%>><%=v%></option>
+    <% end %>
+  </select>
+</p>

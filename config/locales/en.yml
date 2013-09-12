@@ -1,0 +1,27 @@
+# English strings go here for Rails i18n
+en:
+  project_module_todos_module: "Todos"
+
+  label_todo_plural: Todos
+  label_todo_list_plural: To-do lists
+
+  label_add_todo_list: Add a to-do list
+  label_new_todo_list_input_placeholder: Give your to-do list a title
+  label_save_new_list: Save and start adding to-dos
+  label_or: or
+  label_cancel: Cancel
+
+  label_edit: Edit
+  label_delete: Delete
+  label_save_changes: Save changes
+
+  label_add_a_todo: Add a to-do
+  label_add_this_todo: Add this do-do
+  label_add_new_todo_placeholder: Add a new to-do
+  label_done_adding_todos: I'm done adding to-dos
+
+  label_todo_list_uncompleted_todo_status: Uncompleted todo should be reflected by which issue status?
+  label_todo_list_completed_todo_status:   Completed todo should be reflected by which issue status?
+
+  label_add_first_todo_list: Add your first to-do list!
+  label_configure_plugin:    You have to configure this plugin before using it - go to settings &gt; plugins &gt; To-do lists and choose your preferences!
