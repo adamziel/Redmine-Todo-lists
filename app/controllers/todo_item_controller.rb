@@ -10,7 +10,7 @@ class TodoItemController < ApplicationController
 
     settings = Setting[:plugin_redmine_todos]
 
-    @issue = Issue.create(:author_id=>User.current.id, :subject=>params[:name], :status_id=>settings[:uncompleted_todo_status])
+    @issue = Issue.create(:author_id=>User.current.id, :subject=>params[:name], :status_id=>settings[:uncompleted_todo_status], :assigned_to_id => User.current.id)
     @issue.project = @project
     @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first)
     if @issue.tracker.nil?
