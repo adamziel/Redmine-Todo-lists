@@ -24,4 +24,4 @@ en:
   label_todo_list_completed_todo_status:   Completed todo should be reflected by which issue status?
 
   label_add_first_todo_list: Add your first to-do list!
-  label_configure_plugin:    You have to configure this plugin before using it - go to settings &gt; plugins &gt; To-do lists and choose your preferences!
+  label_configure_plugin:    You have to configure this plugin before using it - go to settings > plugins > To-do lists and choose your preferences!
