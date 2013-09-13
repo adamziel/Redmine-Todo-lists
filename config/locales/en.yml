@@ -16,7 +16,7 @@ en:
   label_save_changes: Save changes
 
   label_add_a_todo: Add a to-do
-  label_add_this_todo: Add this do-do
+  label_add_this_todo: Add this to-do
   label_add_new_todo_placeholder: Add a new to-do
   label_done_adding_todos: I'm done adding to-dos
 
@@ -25,3 +25,11 @@ en:
 
   label_add_first_todo_list: Add your first to-do list!
   label_configure_plugin:    You have to configure this plugin before using it - go to admin > plugins > To-do lists and choose your preferences!
+
+  permission_view_todo_lists: "View todo lists"
+  permission_create_todo_lists: "Create todo lists"
+  permission_update_todo_lists: "Update todo lists"
+  permission_delete_todo_lists: "Delete todo lists"
+  permission_create_todos: "Create todos"
+  permission_update_todos: "Update todos"
+  permission_delete_todos: "Delete todos"
