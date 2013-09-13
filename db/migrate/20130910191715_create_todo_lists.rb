@@ -1,5 +1,5 @@
 class CreateTodoLists < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :todo_lists do |t|
       t.string :name
       t.integer :position, :default => 1
@@ -15,10 +15,5 @@ class CreateTodoLists < ActiveRecord::Migration
       t.datetime :completed_at, :default => Time.now
       t.integer :position, :default => 1
     end
-  end
-
-  def self.down
-    drop_table :todo_lists
-    drop_table :todo_items
   end
 end
