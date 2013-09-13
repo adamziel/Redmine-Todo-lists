@@ -30,7 +30,7 @@ module RedmineTodos
         settings = Setting[:plugin_redmine_todos]
 
         params = context[:params]
-        if params && params[:issue]
+        if params && params[:issue] && settings.include?(:completed_todo_status)
 
           issue = context[:issue]
           todo_item = issue.todo_item

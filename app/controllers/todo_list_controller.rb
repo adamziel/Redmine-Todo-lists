@@ -6,6 +6,9 @@ class TodoListController < ApplicationController
   before_filter :find_todo_list, :only => [:done, :update, :delete]
 
   def index
+    if not @settings.include? :completed_todo_status
+      @settings[:completed_todo_status] = -1
+    end
     # @settings[:completed_todo_status]
     # @settings[:uncompleted_todo_status]
     todo_lists = TodoList.where(:project_id=>@project.id).order("todo_lists.position").map do |i|
