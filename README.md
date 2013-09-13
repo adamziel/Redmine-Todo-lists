@@ -7,6 +7,7 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 1. Clone this repo to plugins/ directory (so all files are in plugins/redmine_todos)
 1. Run rake redmine:plugins:migrate.
 1. Configure the plugin in settings > plugins
+1. Setup per-role permissions in settings > roles (this plugin comes with multiple new types of permissions)
 
 ### Features
 
