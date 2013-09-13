@@ -2,6 +2,7 @@
     <%= javascript_include_tag :"angular.min.js", :plugin => 'redmine_todos' %>
     <%= javascript_include_tag :"angular-resource.min.js", :plugin => 'redmine_todos' %>
     <%= javascript_include_tag :"angular-ui.js", :plugin => 'redmine_todos' %>
+    <%= javascript_include_tag :"jquery.textarea.expander.js", :plugin => 'redmine_todos' %>
     <%= javascript_include_tag :todos, :plugin => 'redmine_todos' %>
     <%= stylesheet_link_tag :"angular-ui.min.css", :plugin => 'redmine_todos' %>
     <%= stylesheet_link_tag :todos, :plugin => 'redmine_todos' %>
@@ -16,7 +17,8 @@
                     placeholder="{{ placeholder }}"
                     ng-enter="save()"
                     ng-model="getResource().name_editable"
-                    ng-focus="isActive"></textarea>
+                    ng-focus="isActive"
+                    ng-elastic></textarea>
         </header>
 
       <footer>

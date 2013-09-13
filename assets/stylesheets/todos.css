@@ -1,3 +1,7 @@
+.controller-todo_list [type=checkbox] {
+    vertical-align: top;
+}
+
 .ui-sortable-placeholder {
     background: #ddd;
     visibility: visible;
@@ -173,6 +177,7 @@ textarea.newEntry {
     color: #000;
     padding: 3px 0;
     font-size: 13px;
+    max-width: 90%;
 }
 
 .controller-todo_list ol.todo_lists > li > .todo_list > ol > li > span > a:hover {
@@ -206,6 +211,7 @@ textarea.newEntry {
 .controller-todo_list ol.todo_lists > li > .todo_list > footer > todo-resource-edit-form textarea {
     position: relative;
     left: -2px;
+    font-size: 13px;
 }
 
 

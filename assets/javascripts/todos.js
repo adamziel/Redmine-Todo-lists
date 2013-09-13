@@ -92,6 +92,11 @@ angular
             });
         };
     })
+    .directive('ngElastic', function () {
+        return function (scope, element, attrs) {
+            $(element).TextAreaExpander();
+        };
+    })
 ;
 angular
     .module('ui.sortable', [])
