@@ -17,16 +17,21 @@ class TodoItemController < ApplicationController
       render_error l(:error_no_tracker_in_project)
       return false
     end
-    call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
-    if @issue.save
-      call_hook(:controller_issues_new_after_save,  { :params => params, :issue => @issue})
 
-      item = TodoItem.create(:todo_list_id=> @todo_list.id, :issue_id=> @issue.id)
-      if item.save()
-        return render :json => {:success => true, :name => params[:name]}
-                                    .merge(item.as_json)
-                                    .to_json
+    Issue.transaction do
+    TodoItem.transaction do
+      call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
+      if @issue.save
+        call_hook(:controller_issues_new_after_save,  { :params => params, :issue => @issue})
+
+        item = TodoItem.create(:todo_list_id=> @todo_list.id, :issue_id=> @issue.id)
+        if item.save()
+          return render :json => {:success => true, :name => params[:name]}
+                                      .merge(item.as_json)
+                                      .to_json
+        end
       end
+    end
     end
     render :json => {:success => false }
   end
