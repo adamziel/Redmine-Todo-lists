@@ -37,10 +37,10 @@ module RedmineTodos
 
           return if todo_item.blank?
 
-          if todo_item.completed_at and issue.status_id.to_s != settings[:completed_todo_status]
+          if not todo_item.completed_at.nil? and issue.status_id.to_s != settings[:completed_todo_status]
             todo_item.completed_at = nil
           end
-          if not todo_item.completed_at and issue.status_id.to_s == settings[:completed_todo_status]
+          if todo_item.completed_at.nil? and issue.status_id.to_s == settings[:completed_todo_status]
             todo_item.completed_at = Time.now()
           end
           todo_item.save()
