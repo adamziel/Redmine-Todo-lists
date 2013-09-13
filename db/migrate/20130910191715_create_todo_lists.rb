@@ -10,7 +10,7 @@ class CreateTodoLists < ActiveRecord::Migration
 
     create_table :todo_items do |t|
       t.references :issue, :null => false
-      t.references :todo, :null => false
+      t.references :todo_list, :null => false
       t.datetime :updated_at, :default => Time.now
       t.datetime :completed_at, :default => Time.now
       t.integer :position, :default => 1
