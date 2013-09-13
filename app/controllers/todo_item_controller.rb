@@ -68,9 +68,5 @@ class TodoItemController < ApplicationController
   def find_todo_item
     @todo_item = TodoItem.find(params[:id])
   end
-
-  def find_project
-    @project = Project.find(params[:project_id])
-  end
   
 end
