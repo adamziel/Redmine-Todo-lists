@@ -1,0 +1,35 @@
+﻿# German strings go here for Rails i18n
+en:
+  project_module_todos_module: "Todo's"
+
+  label_todo_plural: "Todo's"
+  label_todo_list_plural: "ToDo Liste"
+
+  label_add_todo_list: "ToDo Liste hinzufügen"
+  label_new_todo_list_input_placeholder: "Gib deiner ToDo Liste einen Titel"
+  label_save_new_list: "Speichern und ToDo's hinzufügen"
+  label_or: "oder"
+  label_cancel: "abbrechen"
+
+  label_edit: "Bearbeiten"
+  label_delete: "Löschen"
+  label_save_changes: "Änderungen speichern"
+
+  label_add_a_todo: "To Do hinzufügen"
+  label_add_this_todo: "Dieses ToDo hinzufügen"
+  label_add_new_todo_placeholder: "Neues ToDo hinzufügen"
+  label_done_adding_todos: "Ich bin fertig, ToDo's hinzuzufügen"
+
+  label_todo_list_uncompleted_todo_status: "Status für unfertige ToDo's?"
+  label_todo_list_completed_todo_status:   "Status für fertige ToDo's?"
+
+  label_add_first_todo_list: "Füge deine erste ToDo-Liste hinzu!"
+  label_configure_plugin:    "Du musst das Plugin vor der Verwendung konfigurieren. Geh zu Admin > Plugins > ToDo Liste und konfiguriere es!"
+  
+  permission_view_todo_lists: "ToDo-Liste anzeigen"
+  permission_create_todo_lists: "ToDo-Liste anlegen"
+  permission_update_todo_lists: "ToDo-Liste bearbeiten"
+  permission_delete_todo_lists: "ToDo-Liste löschen"
+  permission_create_todos: "ToDo's erstellen"
+  permission_update_todos: "ToDo's bearbeiten"
+  permission_delete_todos: "ToDo's löschen"
