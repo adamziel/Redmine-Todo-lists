@@ -12,6 +12,13 @@ textarea.newEntry {
   overflow: hidden;
   font-family: "Lucida Grande", verdana, arial, helvetica, sans-serif;
 }
+todo-resource-edit-form textarea {
+  position: relative;
+  left: -2px;
+}
+todo-resource-edit-form .withCheckbox footer {
+  padding-left: 19px;
+}
 .controller-todo_list #todos_container {
   width: 80%;
   float: left;
@@ -131,17 +138,15 @@ textarea.newEntry {
   text-decoration: none;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > header todo-resource-edit-form textarea {
-  position: relative;
-  left: -2px;
   font-weight: bold;
   font-size: 16px;
+}
+.controller-todo_list #todos_container ol.todo_lists > li > header todo-resource-edit-form footer span {
+  margin-left: -2px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > header > aside {
   top: 2px;
   left: -63px;
-}
-.controller-todo_list #todos_container ol.todo_lists > li todo-resource-edit-form footer span {
-  margin-left: 3px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list {
   padding-left: 20px;
@@ -149,21 +154,23 @@ textarea.newEntry {
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol.completed {
   margin-top: 10px;
 }
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list todo-resource-edit-form textarea {
+  margin-top: 1px;
+  font-size: 13px;
+}
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list todo-resource-edit-form [type=checkbox] {
+  vertical-align: top;
+  margin-top: 6px;
+}
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list todo-resource-edit-form footer span {
+  margin-left: 3px;
+}
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > footer {
   position: relative;
   top: -6px;
   float: left;
   clear: both;
   width: 100%;
-}
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > footer > todo-resource-edit-form {
-  position: relative;
-  top: -7px;
-}
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > footer > todo-resource-edit-form textarea {
-  position: relative;
-  left: -2px;
-  font-size: 13px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > footer [type=checkbox] {
   vertical-align: top;
@@ -190,16 +197,6 @@ textarea.newEntry {
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li article [type=submit] {
   margin-left: 15px;
-}
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li todo-resource-edit-form textarea {
-  position: relative;
-  left: -2px;
-  margin-top: 1px;
-  font-size: 13px;
-}
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li todo-resource-edit-form [type=checkbox] {
-  vertical-align: top;
-  margin-top: 6px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > span > .todoContents {
   max-width: 90%;

@@ -14,6 +14,18 @@ textarea.newEntry {
   font-family: "Lucida Grande", verdana, arial, helvetica, sans-serif;
 }
 
+todo-resource-edit-form {
+  textarea {
+    position: relative;
+    left: -2px;
+  }
+  .withCheckbox {
+    footer {
+      padding-left: 19px;
+    }
+  }
+}
+
 .controller-todo_list {
 
   @maxWidth: 700px;
@@ -145,22 +157,16 @@ textarea.newEntry {
           }
           todo-resource-edit-form {
             textarea {
-              position: relative;
-              left: -2px;
               font-weight: bold;
               font-size: 16px;
+            }
+            footer span {
+              margin-left: -2px;
             }
           }
           > aside {
             top: 2px;
             left: -63px;
-          }
-        }
-        todo-resource-edit-form {
-          footer {
-            span {
-              margin-left: 3px;
-            }
           }
         }
         > .todo_list {
@@ -169,21 +175,26 @@ textarea.newEntry {
             margin-top: 10px;
           }
 
+          todo-resource-edit-form {
+            textarea {
+              margin-top: 1px;
+              font-size: 13px;
+            }
+            [type=checkbox] {
+              vertical-align: top;
+              margin-top: 6px;
+            }
+            footer span {
+              margin-left: 3px;
+            }
+          }
+
           > footer {
             position: relative;
             top: -6px;
             float: left;
             clear: both;
             width: 100%;
-            > todo-resource-edit-form {
-              position: relative;
-              top: -7px;
-              textarea {
-                position: relative;
-                left: -2px;
-                font-size: 13px;
-              }
-            }
             [type=checkbox] {
               vertical-align: top;
             }
@@ -214,18 +225,6 @@ textarea.newEntry {
               article {
                 [type=submit] {
                   margin-left: 15px;
-                }
-              }
-              todo-resource-edit-form {
-                textarea {
-                  position: relative;
-                  left: -2px;
-                  margin-top: 1px;
-                  font-size: 13px;
-                }
-                [type=checkbox] {
-                  vertical-align: top;
-                  margin-top: 6px;
                 }
               }
               > span {

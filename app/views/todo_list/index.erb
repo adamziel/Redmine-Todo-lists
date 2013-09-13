@@ -9,7 +9,7 @@
 <% end %>
 
 <script type="text/ng-template" id="todoResourceEditForm.html">
-  <article ng-show="isActive" ng-class="elementClass">
+  <article ng-show="isActive" ng-class="elementClass+(withCheckbox?' withCheckbox':'')">
     <form ng-submit="save()">
         <header>
             <input type="checkbox" disabled="true" ng-show="withCheckbox" />
@@ -24,7 +24,7 @@
       <footer>
         <span ng-hide="isInProgress || todoResource.isError">
             <button>{{ labelSaveChanges }}</button>
-            <%= l(:label_or) %>
+            <%= l(:label_or) %>&nbsp;
             <span class="a-like" ng-click="cancel()">{{ labelCancel || <%= l(:label_cancel).to_json %> }}</span>
         </span>
 
@@ -136,10 +136,12 @@
                         <span ng-hide="editingTodoItem == todoItem.id">
                             <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
 
-                            <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue.id} }}" ng-hide="todoItem.editMode.formVisible">
-                              <!--[#{{ todoItem.issue.id }}]-->
-                              {{ todoItem.name }}
-                            </a>
+                            <div class="todoContents">
+                                <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue.id} }}" ng-hide="todoItem.editMode.formVisible">
+                                  <!--[#{{ todoItem.issue.id }}]-->
+                                  {{ todoItem.name }}
+                                </a>
+                            </div>
                         </span>
 
                         <todo-resource-edit-form
