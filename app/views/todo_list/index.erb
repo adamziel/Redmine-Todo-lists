@@ -89,11 +89,11 @@
       </div>
     </header>
 
-    <div ng-hide="isConfigured()">
+    <div ng-hide="isConfigured()" class="content">
       <%= l(:label_configure_plugin) %>
     </div>
 
-    <div ng-hide="todoLists.data.length || ducktypingTodoList || !isConfigured()">
+    <div ng-hide="todoLists.data.length || ducktypingTodoList || !isConfigured()" class="content">
       <%= l(:label_add_first_todo_list) %>
     </div>
 

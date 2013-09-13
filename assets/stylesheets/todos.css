@@ -33,9 +33,14 @@ textarea.newEntry {
     padding-bottom: 80px;
 }
 
+#todos_container > header,
+#todos_container > .content {
+    margin-left: 76px;
+}
+
 #todos_container > header {
     width: 100%;
-    margin: 0 0 10px 76px;
+    margin-bottom: 10px;
     padding: 10px 0  12px 0;
     border-bottom: 1px solid #dadada;
 }
