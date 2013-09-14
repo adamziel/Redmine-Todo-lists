@@ -1,3 +1,9 @@
+.indicator {
+  width: 31px;
+  display: inline-block;
+  text-indent: -10000px;
+  background: url(../images/indicator.gif) center center no-repeat #ffffff !important;
+}
 .ui-sortable-placeholder {
   background: #ddd;
   visibility: visible;

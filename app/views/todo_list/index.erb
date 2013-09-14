@@ -34,8 +34,8 @@
             <span class="a-like" ng-click="cancel()">{{ labelCancel || <%= l(:label_cancel).to_json %> }}</span>
         </span>
 
-        <span ng-show="isInProgress">
-            Indicator...
+        <span ng-show="isInProgress" class="indicator">
+          Loading...
         </span>
         <span ng-show="isError">
             Server returned error 500 :(
@@ -54,8 +54,8 @@
             <span ng-show="todoItem.due_date && assignedToName()">·</span>
             <span ng-show="assignedToName()">{{ assignedToName() }}</span>
         </span>
-        <span ng-show="saveInProgress">
-          Indicator..
+        <span ng-show="saveInProgress" class="indicator">
+          Loading...
         </span>
       </span>
 
@@ -155,8 +155,8 @@
                   <span ng-click="deleteTodoList(todoList)" class="delete a-like" ng-show="hasAnyPermission('delete_todo_lists')"><%= l(:label_delete) %></span>
                   <span ng-click="setState('editingTodoList', todoList.id)" class="edit a-like" ng-show="hasAnyPermission('update_todo_lists')"><%= l(:label_edit) %></span>
                 </aside>
-                <aside ng-show="deleteTodoList === todoList.id" class="visible">
-                  Indicator...
+                <aside ng-show="deletingTodoList === todoList.id" class="visible indicator">
+                  Loading...
                 </aside>
 
                 <span ng-hide="editingTodoList == todoList.id">
@@ -182,8 +182,8 @@
                           <span ng-click="deleteTodo(todoItem)" class="delete a-like" ng-show="hasAnyPermission('delete_todos')"><%= l(:label_delete) %></span>
                           <span ng-click="setState('editingTodoItem', todoItem.id)" class="edit a-like" ng-show="hasAnyPermission('update_todos')"><%= l(:label_edit) %></span>
                         </aside>
-                        <aside ng-show="deleteTodoItem === todoItem.id" class="visible">
-                          Indicator...
+                        <aside ng-show="deletingTodoItem === todoItem.id" class="visible indicator">
+                          Loading...
                         </aside>
                         <span ng-hide="editingTodoItem == todoItem.id">
                             <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
