@@ -101,6 +101,7 @@
     };
     window.completed_todo_status = <%=@settings[:completed_todo_status].to_json.html_safe%>;
     window.uncompleted_todo_status = <%=@settings[:uncompleted_todo_status].to_json.html_safe%>;
+    window.comments_nbs = <%=@comments_nbs.to_json.html_safe%>
     window.routing = {
         show_issue: '<%= url_for :controller => 'issues', :action => 'show', :id => ':issue_id' %>',
 
@@ -134,8 +135,7 @@
                 is-active="ducktypingTodoList"
                 is-in-progress="saveInProgress"
                 is-error="saveError"
-                save-callback="createTodoList"
-            />
+                save-callback="createTodoList"></todo-resource-edit-form>
         </article>
       </div>
     </header>
@@ -171,8 +171,7 @@
                     is-in-progress="saveInProgress"
                     is-error="saveError"
                     on-cancel="setState('editingTodoItem', false)"
-                    save-callback="updateTodoList"
-                />
+                    save-callback="updateTodoList"></todo-resource-edit-form>
             </header>
             <article class="todo_list">
                 <ol ui-sortable="sortableOptionsTodoItem" ng-model="todoList.todo_items">
@@ -192,9 +191,11 @@
                                 <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue_id} }}" ng-hide="todoItem.editMode.formVisible">
                                   <!--[#{{ todoItem.id }}]-->
                                   {{ todoItem.subject }}</a>
-                                  <due-assignee-pill todo-item="todoItem" />
+                                  <due-assignee-pill todo-item="todoItem"></due-assignee-pill>
+                                  <span class="pill" ng-show="todoItem.commentsNb"><span class="details hasData"><span>{{ todoItem.commentsNb }} comment{{ todoItem.commentsNb>1?'s':'' }}</span></span></span>
                             </div>
                         </span>
+
 
                         <todo-resource-edit-form
                             label-save-changes='<%= l(:label_save_changes).to_json %>'
@@ -205,8 +206,8 @@
                             is-in-progress="saveInProgress"
                             is-error="saveError"
                             on-cancel="setState('editingTodoItem', false)"
-                            save-callback="updateTodo"
-                        />
+                            save-callback="updateTodo"></todo-resource-edit-form>
+
                         <!--<a class="pill assignee inactive" href="#">Adam Zieliński</a>
                         <a class="pill comments" href="#">13 <%= l(:label_comments_nb) %></a>-->
                     </li>
@@ -227,8 +228,7 @@
                         is-in-progress="saveInProgress"
                         is-error="saveError"
                         on-cancel="setState('ducktypingTodoItem', false)"
-                        save-callback="createTodo"
-                    />
+                        save-callback="createTodo"></todo-resource-edit-form>
                   </footer>
 
                   <ol class="completed">

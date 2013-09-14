@@ -24,6 +24,7 @@ class TodoListController < ApplicationController
             .where('todo_items.todo_list_id in (?)', todo_lists_ids)
             .includes(:issue)
             .order('todo_items.position')
+            .select('*')
             .each do |item|
                 for todo_list in todo_lists
                   todo_list['subject'] =todo_list['name']
@@ -85,7 +86,18 @@ class TodoListController < ApplicationController
       @recently_completed_json[row.todo_list_id] << hash
     end
     @recently_completed_json = @recently_completed_json.to_json
-    # .joins(:todo_items)
+
+    @comments_nbs = Hash.new
+    ActiveRecord::Base.connection.execute(
+        %{
+          select
+            todo_items.id,
+            (select count(*) from journals where journals.journalized_type = 'Issue' and journals.journalized_id=issues.id and notes != '' and notes is not null) as comments_nbs
+          from todo_items
+            left join issues on issues.id=todo_items.issue_id
+            where issues.project_id = #{TodoItem.sanitize(@project.id)}
+        }
+    ).each{|i|@comments_nbs[i['id']] = i['comments_nbs']}
   end
 
   def create

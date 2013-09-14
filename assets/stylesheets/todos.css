@@ -25,14 +25,11 @@ todo-resource-edit-form textarea {
 todo-resource-edit-form .withCheckbox footer {
   padding-left: 19px;
 }
-due-assignee-pill {
-  display: inline-block;
-}
-due-assignee-pill > .pill {
+.pill {
   position: relative;
   display: inline-block;
 }
-due-assignee-pill > .pill > .details > span {
+.pill > .details > span {
   border: 1px solid #bbb;
   border-radius: 15px;
   padding: 1px 5px;
@@ -41,18 +38,21 @@ due-assignee-pill > .pill > .details > span {
   color: #777;
   cursor: pointer;
 }
-due-assignee-pill > .pill > .details.hasData > span {
+.pill > .details.hasData > span {
   background: #eee;
   border: 1px solid #eee;
 }
-due-assignee-pill > .pill > .details:hover > span {
+.pill > .details:hover > span {
   border: 1px solid #ddd;
   background: #ddd;
 }
-due-assignee-pill > .pill > .details.active > span {
+.pill > .details.active > span {
   border: 1px solid #000;
   background: #000;
   color: #FFF;
+}
+due-assignee-pill {
+  display: inline-block;
 }
 due-assignee-pill > .pill .form {
   box-sizing: border-box;

@@ -336,6 +336,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             }
 
             list.todo_items = list.todo_items.map(function(item) {
+                item['commentsNb'] = $window.comments_nbs[item.id] || 0;
                 item['completed'] = $scope.isTodoCompleted(item);
                 if(item['completed_at'])
                 {

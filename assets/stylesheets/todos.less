@@ -39,36 +39,39 @@ todo-resource-edit-form {
   }
 }
 
+.pill {
+  position: relative;
+  display: inline-block;
+  > .details {
+    > span {
+      border: 1px solid #bbb;
+      border-radius: 15px;
+      padding: 1px 5px;
+      font-size: 10px;
+      text-align: center;
+      color: #777;
+      cursor: pointer;
+    }
+    &.hasData > span {
+      background: #eee;
+      border: 1px solid #eee;
+    }
+    &:hover > span {
+      border: 1px solid #ddd;
+      background: #ddd;
+    }
+    &.active > span {
+      border: 1px solid #000;
+      background: #000;
+      color: #FFF;
+    }
+  }
+}
+
 due-assignee-pill {
   display: inline-block;
 
   > .pill {
-    position: relative;
-    display: inline-block;
-    > .details {
-      > span {
-        border: 1px solid #bbb;
-        border-radius: 15px;
-        padding: 1px 5px;
-        font-size: 10px;
-        text-align: center;
-        color: #777;
-        cursor: pointer;
-      }
-      &.hasData > span {
-        background: #eee;
-        border: 1px solid #eee;
-      }
-      &:hover > span {
-        border: 1px solid #ddd;
-        background: #ddd;
-      }
-      &.active > span {
-        border: 1px solid #000;
-        background: #000;
-        color: #FFF;
-      }
-    }
 
     .form {
       .border-box;
