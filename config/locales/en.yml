@@ -26,6 +26,11 @@ en:
   label_add_first_todo_list: Add your first to-do list!
   label_configure_plugin:    You have to configure this plugin before using it - go to admin > plugins > To-do lists and choose your preferences!
 
+  label_unassigned: Unassigned
+  label_set_due_date: "Set the due date"
+  label_no_due_date: "No due date"
+  label_assign_this_todo_to: "Assign this to-do to"
+
   permission_view_todo_lists: "View todo lists"
   permission_create_todo_lists: "Create todo lists"
   permission_update_todo_lists: "Update todo lists"

@@ -11,4 +11,12 @@ class TodoList < ActiveRecord::Base
   
   validates_presence_of :name
 
+  def as_json(options=nil)
+    {
+        :id => self.id,
+        :subject => self.name
+    }
+  end
+
+
 end

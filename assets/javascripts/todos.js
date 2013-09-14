@@ -1,7 +1,8 @@
 angular
-    .module('redmine_todos', ['ngResource', 'ui.sortable'])
+    .module('redmine_todos', ['ngResource', 'ui.sortable', 'ui.date'])
     .config(function($httpProvider) {
-        $httpProvider.defaults.headers.common['X-Requested-With'];
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+        $httpProvider.defaults.headers.common['Content-type', 'application/json'];
         $httpProvider.defaults.headers.common['X-CSRF-Token'] = window.csrfToken;
     })
 
@@ -11,6 +12,83 @@ angular
                 return params[all] || all;
             });
         };
+    })
+
+    .service('Translator', function() {
+        var translations;
+        return {
+            setTranslations: function(newTrans) {
+                translations = newTrans;
+            },
+            trans: function(inp) {
+                return translations[inp] || inp;
+            }
+        }
+    })
+
+    .service('Registry', function() {
+        var data = {};
+        return {
+            // data: data,
+            has: function(key) {
+                return typeof data[key] === "undefined";
+            },
+            get: function(key) {
+                return data[key];
+            },
+            set: function(key, value) {
+                data[key] = value;
+            }
+        }
+    })
+
+    .service('UsersManager', function(Translator) {
+        var users;
+        var currentId;
+        return {
+            setCurrentUserId: function(id) {
+                currentId = id;
+            },
+            getCurrentUserId: function() {
+                return currentId;
+            },
+            set: function(usersData) {
+                users = usersData;
+            },
+            get: function() {
+                return users;
+            },
+            getOptions: function() {
+                return jQuery.merge([
+                    {id: "", name:Translator.trans("unassigned")},
+                    {id: currentId, name: ">> "+Translator.trans("me")+" <<"}
+                ], users);
+            },
+            getById: function(id) {
+                for(u in users)
+                {
+                    if(users[u].id == id)
+                    {
+                        return users[u];
+                    }
+                }
+            }
+        }
+    })
+
+    .directive('clickOutside', function($document){
+        return {
+            restrict: 'A',
+            link: function(scope, elem, attr, ctrl) {
+                $document.on('click', function(e) {
+                    var $target = $(e.target);
+                    if(!elem.has($target).length && !elem.is($target))
+                    {
+                        scope.$apply(attr.clickOutside);
+                    }
+                });
+            }
+        }
     })
 
     .directive('todoResourceEditForm', function($window, $parse) {
@@ -23,6 +101,7 @@ angular
                 labelSaveChanges: '=',
                 labelCancel: '=',
                 withCheckbox: '=',
+                withDueAssigneePill: '=',
 
                 resource: '=',
                 resourceGetter: '=',
@@ -33,10 +112,13 @@ angular
             },
             link: function(scope, iElement, iAttrs) {
                 scope.save = function() {
-                    scope.resource.name = scope.resource.name_editable ;
+                    // scope.resource.subject_new = scope.resource.subject;
                     if(scope.saveCallback) {
                         scope.saveCallback(
-                            scope.getResource()
+                            scope.getResource(),
+                            function(resource) {
+                                scope.resource = resource;
+                            }
                         );
                     } else {
                         scope.resource.$save();
@@ -54,8 +136,82 @@ angular
                     return scope.resource; // || scope.resourceGetter();
                 };
                 scope.$watch('isActive', function(newV) {
-                    if(newV) scope.resource.name_editable = scope.resource.name;
+                    if(newV) scope.resource.subject_new = scope.resource.subject;
                 })
+            }
+        };
+    })
+
+    .directive('dueAssigneePill', function($window, $parse, Translator, UsersManager, Registry) {
+        return {
+            restrict: "E",
+            template: $window.dueAssigneePillTemplate,
+            transclude: true,
+            scope: {
+                todoItem: '=',
+                forNewTodo: '@'
+            },
+            link: function(scope, iElement, iAttrs) {
+                var forNewTodo = scope.forNewTodo;
+                if(typeof forNewTodo === 'undefined')
+                {
+                    forNewTodo = false;
+                }
+                scope.Translator = Translator;
+                scope.saveInProgress = false;
+                scope.isFormVisible = false;
+                scope.UsersManager = UsersManager
+
+                var justSetDetails = false;
+                scope.$watch('isFormVisible', function(newV) {
+                    if(newV)
+                    {
+                        justSetDetails = !forNewTodo;
+                        if(!forNewTodo)
+                        {
+                            scope.todoItem.due_date_new = scope.todoItem.due_date;
+                            scope.todoItem.assigned_to_id_new = scope.todoItem.assigned_to_id;
+                        }
+                    }
+                });
+
+                var initializing = !forNewTodo;
+                scope.$watch('[todoItem.due_date_new, todoItem.assigned_to_id_new]', function(newT, oldT) {
+                    if(forNewTodo)
+                    {
+                        Registry.set('due_date_new', newT[0]);
+                        Registry.set('assigned_to_id_new', newT[1]);
+                    }
+                    if(initializing || justSetDetails || scope.saveInProgress)
+                    {
+                        justSetDetails = false;
+                        initializing = false;
+                        return;
+                    }
+
+                    if(!forNewTodo)
+                    {
+                        scope.isFormVisible = false;
+                        scope.saveInProgress = true;
+                        scope.todoItem.saveMode = "due_assignee";
+                        scope.todoItem.$update({id:scope.todoItem.id}, function(resource) {
+                            justSetDetails = true;
+                            scope.saveInProgress = false;
+                            scope.todoItem = resource;
+                        }, function() {
+                            alert(Translator.trans("label_ajax_error"));
+                            scope.saveInProgress = false;
+
+                        });
+                    } else {
+                        scope.todoItem.due_date = scope.todoItem.due_date_new;
+                        scope.todoItem.assigned_to_id = scope.todoItem.assigned_to_id_new;
+                    }
+                }, true);
+                scope.assignedToName = function() {
+                    var user = UsersManager.getById(scope.todoItem.assigned_to_id);
+                    return user ? user.name : "";
+                };
             }
         };
     })
@@ -92,6 +248,19 @@ angular
             });
         };
     })
+    .directive('ngEscape', function () {
+        return function (scope, element, attrs) {
+            $(document).bind("keydown keypress", function (event) {
+                if(event.which === 27) {
+                    scope.$apply(function (){
+                        scope.$eval(attrs.ngEscape);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    })
     .directive('ngElastic', function () {
         return function (scope, element, attrs) {
             $(element).TextAreaExpander();
@@ -99,10 +268,9 @@ angular
     })
 ;
 
-function TodoListController($scope, $window, $timeout, $filter, $http, $resource)
+function TodoListController($scope, $window, $timeout, $filter, $http, $resource, Translator, UsersManager, Registry)
 {
     window.scope = $scope;
-
     // Init {{
     var transformRequest = function(data, headersGetter)
     {
@@ -118,9 +286,19 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
     });
 
     $scope.routes = $window.routing;
+    Translator.setTranslations($window.translations);
     $scope.permissions = $window.permissions;;
+
     $scope.completed_todo_status = $window.completed_todo_status;
     $scope.uncompleted_todo_status = $window.uncompleted_todo_status;
+
+    UsersManager.setCurrentUserId($window.user.id);
+    UsersManager.set($window.assignable_users.map(function(data){
+        return {
+            id: data.user.id,
+            name: data.user.firstname+" "+data.user.lastname
+        };
+    }));
 
     $scope.isConfigured = function() {
         return $scope.completed_todo_status && $scope.uncompleted_todo_status;
@@ -131,11 +309,19 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
     };
     $scope.prospects = {
         todoList: new TodoList(),
-        todoItem: new TodoItem()
-    }
+        todoItem: undefined,
+        recreateTodoItem: function(userId) {
+            this.todoItem = new TodoItem();
+            this.todoItem.due_date = Registry.get('due_date_new');
+            this.todoItem.due_date_new = Registry.get('due_date_new');
+            this.todoItem.assigned_to_id = userId || Registry.get('assigned_to_id_new')
+            this.todoItem.assigned_to_id_new = userId || Registry.get('assigned_to_id_new')
+        }
+    };
+    $scope.prospects.recreateTodoItem(UsersManager.getCurrentUserId());
 
     $scope.isTodoCompleted = function(todoItem) {
-        return todoItem.issue && todoItem.issue.status_id == $scope.completed_todo_status;
+        return todoItem.status_id == $scope.completed_todo_status;
     };
 
     $scope.todoLists.data = $window.todoLists.map(function(list) {
@@ -147,10 +333,6 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             }
 
             list.todo_items = list.todo_items.map(function(item) {
-                if(item['issue'])
-                {
-                    item['name'] = item['issue']['subject'];
-                }
                 item['completed'] = $scope.isTodoCompleted(item);
                 if(item['completed_at'])
                 {
@@ -239,8 +421,10 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             var list = $scope.findListById(todo_list_id)[1];
             list.todo_items = list.todo_items || [];
             list.todo_items.push(resource);
-            $scope.prospects.todoItem = new TodoItem();
+
+            $scope.prospects.recreateTodoItem();
             $scope.setState('ducktypingTodoItem', todo_list_id);
+
         }, function() {
             $scope.setState('ducktypingTodoItem', todo_list_id);
             $scope.saveInProgress = false;
@@ -249,7 +433,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         // $scope.resetState();
     };
 
-    $scope.updateTodoList = function(resource) {
+    $scope.updateTodoList = function(resource, success) {
         if($scope.saveInProgress) return;
         $scope.savingTodoList = true;
         $scope.saveInProgress = true;
@@ -257,20 +441,22 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
 
         resource.$update({id:resource.id}, function(resource) {
             $scope.resetState();
+            (success||$.noop)(resource);
         }, function() {
             $scope.saveInProgress = false;
             $scope.saveError = true;
         });
     };
 
-    $scope.updateTodo = function(resource) {
+    $scope.updateTodo = function(resource, success) {
         if($scope.saveInProgress) return;
         $scope.savingTodoItem = true;
         $scope.saveInProgress = true;
         $scope.saveStarted = true;
-
+        resource.saveMode = "name";
         resource.$update({id:resource.id}, function(resource) {
             $scope.resetState();
+            (success||$.noop)(resource);
         }, function() {
             $scope.saveInProgress = false;
             $scope.saveError = true;
@@ -349,7 +535,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         $http.post($filter('resolve')($scope.routes.toggle_todo, {':id': todoItem.id }), {
             completed: completed
         }).success(function(response){
-            todoItem.issue.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
+            todoItem.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
             todoItem.completed_at = (new Date(response.completed_at)).getTime();
         });
     };
@@ -384,6 +570,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
     $scope.sortableOptionsTodoItem = {
         axis: 'y',
         connectWith: ".todo_lists .todo_list > ol",
+        handle: '.todoContents > a',
         stop: stopEventHandler
     };
 

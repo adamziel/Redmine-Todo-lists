@@ -11,11 +11,14 @@ class TodoListController < ApplicationController
     end
     # @settings[:completed_todo_status]
     # @settings[:uncompleted_todo_status]
+    @assignable_users_json = @project.users.to_json :only => [:id, :firstname, :lastname]
+
     todo_lists = TodoList.where(:project_id=>@project.id).order("todo_lists.position").map do |i|
       a = i.attributes
       a['todo_items'] = []
       a
     end
+    wanted_issue_attrs = %w(subject status_id assigned_to_id due_date)
     todo_lists_ids = todo_lists.map { |tl| tl['id'] }
     TodoItem.where('issues.status_id != ?', @settings[:completed_todo_status])
             .where('todo_items.todo_list_id in (?)', todo_lists_ids)
@@ -23,10 +26,9 @@ class TodoListController < ApplicationController
             .order('todo_items.position')
             .each do |item|
                 for todo_list in todo_lists
+                  todo_list['subject'] =todo_list['name']
                   if todo_list['id'] == item.todo_list_id
-                    attrs = item.attributes
-                    attrs['issue'] = item.issue.attributes.select { |key, value| ['id', 'subject'].include? key }
-                    (todo_list['todo_items'] ||= []) << attrs
+                    (todo_list['todo_items'] ||= []) << item.as_json
                     break
                   end
                 end
@@ -38,7 +40,7 @@ class TodoListController < ApplicationController
         %{
         SELECT ranked_items.* FROM
         (
-          select todo_items.*, issues.subject, issues.status_id, rank() over (partition by todo_list_id order by updated_at desc)
+          select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, rank() over (partition by todo_list_id order by updated_at desc)
           from todo_items
           LEFT JOIN issues on issues.id=todo_items.issue_id
           WHERE issues.status_id = #{TodoItem.sanitize(@settings[:completed_todo_status])}
@@ -48,12 +50,13 @@ class TodoListController < ApplicationController
       }
     ).each do |row|
       hash = row.attributes.select do |key, value|
-        %w(id position todo_list_id completed_at).include? key
+        %w(id position todo_list_id completed_at issue_id).include? key
       end
-      hash['issue'] = row.attributes.select do |key, value|
-        %w(subject status_id).include? key
+      row.attributes.each do |key, value|
+        if wanted_issue_attrs.include? key
+          hash[key] = value
+        end
       end
-      hash['issue']['id'] = row.issue_id
       @recently_completed_json[row.todo_list_id] << hash
     end
     @recently_completed_json = @recently_completed_json.to_json
@@ -63,15 +66,15 @@ class TodoListController < ApplicationController
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todo_lists, @project)
 
-    list = TodoList.new(name: params[:name], project_id: @project.id, author_id: User.current.id)
+    list = TodoList.new(name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
     list.save()
-    render :json => {:success => true}.merge(list.attributes).to_json
+    render :json => {:success => true}.merge(list.as_json).to_json
   end
 
   def update
     (render_403; return false) unless User.current.allowed_to?(:update_todo_lists, @project)
 
-    @todo_list.name = params[:name]
+    @todo_list.name = params[:subject_new]
     render :json => {:success => @todo_list.save()}.merge(@todo_list.attributes)
   end
 
@@ -115,9 +118,11 @@ class TodoListController < ApplicationController
     @todo_list = TodoList.where(:id => params[:id], :project_id=>@project.id).first
   end
 
+  # This is actually not the same as in the parent class - we are looking for :project_id instead of :id
   def find_project
-    # @project variable must be set before calling the authorize filter
     @project = Project.find(params[:project_id])
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def find_settings

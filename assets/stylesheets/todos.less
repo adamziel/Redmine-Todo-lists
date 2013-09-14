@@ -1,10 +1,16 @@
+.border-box() {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
 .ui-sortable-placeholder {
   background: #ddd;
   visibility: visible;
 }
 
 textarea.newEntry {
-  width: 90%;
+  width: 75%;
   height: 1.1em;
   resize: none;
   border: none;
@@ -22,6 +28,114 @@ todo-resource-edit-form {
   .withCheckbox {
     footer {
       padding-left: 19px;
+    }
+  }
+}
+
+due-assignee-pill {
+  display: inline-block;
+
+  > .pill {
+    position: relative;
+    display: inline-block;
+    > .details {
+      > span {
+        border: 1px solid #bbb;
+        border-radius: 15px;
+        padding: 1px 5px;
+        font-size: 10px;
+        text-align: center;
+        color: #777;
+        cursor: pointer;
+      }
+      &.hasData > span {
+        background: #eee;
+        border: 1px solid #eee;
+      }
+      &:hover > span {
+        border: 1px solid #ddd;
+        background: #ddd;
+      }
+      &.active > span {
+        border: 1px solid #000;
+        background: #000;
+        color: #FFF;
+      }
+    }
+
+    .form {
+      .border-box;
+      @pointerSize: 15px;
+      @pointerFromTop: 20px;
+
+      @width: 260px;
+      position: absolute;
+      z-index: 100;
+      right: -@width - @pointerSize;
+      top: -@pointerSize/2 - @pointerFromTop;
+      width: @width;
+      padding: 15px;
+      box-shadow: 0 0 15px #ddd;
+      overflow: visible;
+      background: #FFF;
+
+      .pointer {
+        @size: @pointerSize;
+
+        position: absolute;
+        top: @pointerFromTop;
+        left: -@size;
+        border-right: @size+1 solid #eee;
+        border-top: @size+1 solid transparent;
+        border-bottom: @size+1 solid transparent;
+        div {
+          position: absolute;
+          top: -@size;
+          left: 1px;
+          border-right: @size solid #fff;
+          border-top: @size solid transparent;
+          border-bottom: @size solid transparent;
+        }
+      }
+
+      > section {
+        > b {
+          display: block;
+          margin-top: 15px;
+          padding-bottom: 5px;
+          border-bottom: 1px solid #ccc;
+        }
+
+        &:first-child {
+          b {
+            margin-top: 0;
+          }
+        }
+
+        &.assignee {
+          b {
+            border-bottom: 0;
+          }
+
+          select {
+            width: 100%;
+            margin-top: 0;
+          }
+        }
+
+        &.due {
+          .nodue {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: underline !important;
+          }
+        }
+      }
+
+      .ui-datepicker-inline {
+        box-shadow: none;
+      }
     }
   }
 }
@@ -203,11 +317,14 @@ todo-resource-edit-form {
               padding: 1px 5px 0 25px;
               text-decoration: underline;
             }
+            due-assignee-pill {
+              float: right;
+            }
           }
           > ol {
             min-height: 6px;
 
-            > li >aside
+            > li > aside,
             &.completed li,
             &.completed li a {
               color: #999;
@@ -220,6 +337,12 @@ todo-resource-edit-form {
               &:hover > aside,
               > aside.visible {
                 display: block;
+              }
+
+              &:hover {
+                .pill {
+                  display: inline-block;
+                }
               }
 
               article {
@@ -241,6 +364,15 @@ todo-resource-edit-form {
                   }
                 }
               }
+              due-assignee-pill .pill .empty.details {
+                display: none;
+              }
+              due-assignee-pill .pill .empty.details.active {
+                display: block;
+              }
+            }
+            > li:hover due-assignee-pill .pill .empty.details {
+              display: inline-block;
             }
             > li:last-child {
               padding-bottom: 16px;

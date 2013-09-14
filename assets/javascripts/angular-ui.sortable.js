@@ -7,7 +7,6 @@ angular
             return {
                 require: '?ngModel',
                 link: function(scope, element, attrs, ngModel) {
-
                     function combineCallbacks(first,second){
                         if( second && (typeof second === "function") ){
                             return function(e,ui){
