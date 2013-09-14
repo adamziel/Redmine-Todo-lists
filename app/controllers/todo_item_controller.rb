@@ -3,6 +3,7 @@ class TodoItemController < ApplicationController
 
   before_filter :find_todo_list, :only => :create
   before_filter :find_todo_item, :only => [:toggle, :update, :delete]
+  before_filter :init_journal
   before_filter :find_project
 
   def create
@@ -60,7 +61,11 @@ class TodoItemController < ApplicationController
     settings = Setting[:plugin_redmine_todos]
     @todo_item.issue.status_id = params[:completed] ? settings[:completed_todo_status] : settings[:uncompleted_todo_status]
     @todo_item.completed_at = params[:completed] ? Time.now : nil
-    return render :json => {:success => self.do_save(@todo_item), :completed_at => @todo_item.completed_at }.to_json
+    return render :json => {
+        :success => self.do_save(@todo_item),
+        :completed_at => @todo_item.completed_at,
+        :status_id => @todo_item.issue.status_id
+    }.to_json
   end
 
   protected
@@ -70,9 +75,9 @@ class TodoItemController < ApplicationController
     Issue.transaction do
       TodoItem.transaction do
         is_new = issue.id.nil?
-        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save, { :params => params, :issue => issue })
+        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save, { :params => params, :issue => issue, :journal => @journal })
         if issue.save!
-          call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save, { :params => params, :issue => issue })
+          call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save, { :params => params, :issue => issue, :journal => @journal })
           if todo_item.id.nil?
             todo_item.issue_id = issue.id
           end
@@ -92,6 +97,14 @@ class TodoItemController < ApplicationController
 
   def find_todo_item
     @todo_item = TodoItem.includes(:issue).find(params[:id])
+  end
+
+  def init_journal
+    if @todo_item.nil?
+      @journal = nil
+    else
+      @journal = @todo_item.issue.init_journal(User.current)
+    end
   end
 
   # This is actually not the same as in the parent class - we are looking for :project_id instead of :id
