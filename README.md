@@ -20,6 +20,14 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 * If you will update an "issue" entity in a different module, this plugin will know about it
 * Manage access
 
+### Not sure? Check out these screenshots:
+
+1. [Basic view](https://raw.github.com/AZielinski/Redmine-Todo-lists/d26d9f9e655eb5a81ecda6650fd66b43f29763a9/screenshots/basic_view.jpg)
+1. [Adding a to-do](https://raw.github.com/AZielinski/Redmine-Todo-lists/d26d9f9e655eb5a81ecda6650fd66b43f29763a9/screenshots/add_todo.jpg)
+1. [Adding a to-do list](https://raw.github.com/AZielinski/Redmine-Todo-lists/d26d9f9e655eb5a81ecda6650fd66b43f29763a9/screenshots/add_todo_list.jpg)
+1. [Assigning a to-do list and setting due date](https://raw.github.com/AZielinski/Redmine-Todo-lists/d26d9f9e655eb5a81ecda6650fd66b43f29763a9/screenshots/assign_todo.jpg)
+1. [Reordering to-dos](https://raw.github.com/AZielinski/Redmine-Todo-lists/d26d9f9e655eb5a81ecda6650fd66b43f29763a9/screenshots/reorder_todos.jpg)
+
 ### Notes
 
 * 0% test coverage
