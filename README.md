@@ -1,6 +1,6 @@
 ### Todo Lists for Redmine
 
-This is a quick implementation of basecamp-like to-do lists. Every to-do item is an "Issue" behind the scenes - this way you can track everything in the "Issues" tab, discuss, upload files, and so on.
+This is a quick implementation of basecamp-like to-do lists. Every to-do item is an "Issue" behind the scenes - this way you can track everything in the "Issues" tab: discuss, upload files, and so on.
 
 ### Installation
 
@@ -12,16 +12,19 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 ### Features
 
 * To-do lists management
-* Very friendly UI (heavily inspired by basecamp) - enter to-dos (=create issues) like: type, enter, type, enter
-* Reordering todo items and todo lists
-* Updating issue affects related to-do item (status and subject updates)
-* Access management
+* Very friendly Ajax UI - heavily inspired by basecamp and created with Angular.js
+* Enter To-do items as simple as: type, enter, type, enter
+* Reorder todo items and todo lists with simple drag & drop
+* Assign items to users and set due dates with a few clicks right from the list
+* If you will update an "issue" entity in a different module, this plugin will know about it
+* Manage access
 
 ### Notes
 
 * 0% test coverage
-* Works only with PostgreSQL (and probably SQL server - window clause is used)
-* I tested it only under firefox 23 and chrome 28 - it probably won't work well with IE (especially that angular.js is involved and no compability changes were performed)
+* Works with MySQL and PostgreSQL (and _probably_ with SQL server)
+* Tested only under firefox 23 and chrome 28 - it probably won't work well with IE (especially that angular.js is involved and no compability changes were performed)
+* Info for devs: I noticed that on dev server (WEBrick) managing issues sometimes results with an error 500 (error message points me to some other plugin I have). There are no problems on production server though.
 
 ### Disclaimer
 
