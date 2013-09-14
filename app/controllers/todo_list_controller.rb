@@ -36,19 +36,44 @@ class TodoListController < ApplicationController
     @todo_lists_json = todo_lists.to_json
 
     @recently_completed_json = Hash.new{|h,k| h[k] = []}
-    TodoItem.find_by_sql(
-        %{
-        SELECT ranked_items.* FROM
-        (
-          select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, rank() over (partition by todo_list_id order by updated_at desc)
-          from todo_items
-          LEFT JOIN issues on issues.id=todo_items.issue_id
-          WHERE issues.status_id = #{TodoItem.sanitize(@settings[:completed_todo_status])}
-        ) AS ranked_items
-        WHERE rank <= 2
-        ORDER BY todo_list_id, completed_at desc
-      }
-    ).each do |row|
+    if ActiveRecord::Base.connection.instance_values['config'][:adapter] == 'mysql'
+      recently_completed = TodoItem.find_by_sql(
+          %{
+            select * from (
+                select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, (
+                          CASE todo_items.todo_list_id
+                          WHEN @curTLId THEN @curRow := @curRow + 1
+                          ELSE @curRow := 1 AND @curTLId := todo_items.todo_list_id  END
+                        ) + 1 AS rank
+                from
+                todo_items
+                join
+                (
+                  select @curRow := 0, @curTLId := 0
+                ) r
+                LEFT JOIN issues on issues.id=todo_items.issue_id
+                where issues.status_id = #{TodoItem.sanitize(@settings[:completed_todo_status])}
+                order by todo_items.todo_list_id, completed_at desc
+            ) a
+            where rank < 4
+          }
+      )
+    else
+      recently_completed = TodoItem.find_by_sql(
+          %{
+            SELECT ranked_items.* FROM
+            (
+              select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, rank() over (partition by todo_list_id order by updated_at desc)
+              from todo_items
+              LEFT JOIN issues on issues.id=todo_items.issue_id
+              WHERE issues.status_id = #{TodoItem.sanitize(@settings[:completed_todo_status])}
+            ) AS ranked_items
+            WHERE rank <= 2
+            ORDER BY todo_list_id, completed_at desc
+          }
+      )
+    end
+    recently_completed.each do |row|
       hash = row.attributes.select do |key, value|
         %w(id position todo_list_id completed_at issue_id).include? key
       end
