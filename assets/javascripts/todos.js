@@ -271,7 +271,7 @@ angular
 function TodoListController($scope, $window, $timeout, $filter, $http, $resource, Translator, UsersManager, Registry)
 {
     window.scope = $scope; // just for easier debugging
-    
+
     $scope.routes = $window.routing;
 
     // Init {{

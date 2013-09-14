@@ -189,7 +189,7 @@
                             <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
 
                             <div class="todoContents">
-                                <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.id} }}" ng-hide="todoItem.editMode.formVisible">
+                                <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue_id} }}" ng-hide="todoItem.editMode.formVisible">
                                   <!--[#{{ todoItem.id }}]-->
                                   {{ todoItem.subject }}</a>
                                   <due-assignee-pill todo-item="todoItem" />

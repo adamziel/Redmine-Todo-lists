@@ -10,6 +10,7 @@ class TodoItem < ActiveRecord::Base
         :position => self.position,
         :updated_at => self.updated_at,
         # :name => self.issue.subject,
+        :issue_id => self.issue_id,
         :todo_list_id => self.todo_list_id,
         :subject => self.issue.subject,
         :status_id => self.issue.status_id,
