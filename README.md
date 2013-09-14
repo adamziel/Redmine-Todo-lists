@@ -14,7 +14,8 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 * To-do lists management
 * Very friendly Ajax UI - heavily inspired by basecamp and created with Angular.js
 * Enter To-do items as simple as: type, enter, type, enter
-* Reorder todo items and todo lists with simple drag & drop
+* Reorder and move to-do items between lists with ease by dragging them
+* Reorder to-do lists by dragging them
 * Assign items to users and set due dates with a few clicks right from the list
 * If you will update an "issue" entity in a different module, this plugin will know about it
 * Manage access
