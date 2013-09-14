@@ -100,7 +100,7 @@ class TodoListController < ApplicationController
     (render_403; return false) unless User.current.allowed_to?(:update_todo_lists, @project)
 
     @todo_list.name = params[:subject_new]
-    render :json => {:success => @todo_list.save()}.merge(@todo_list.attributes)
+    render :json => {:success => @todo_list.save()}.merge(@todo_list.as_json)
   end
 
   def delete
