@@ -271,22 +271,24 @@ angular
 function TodoListController($scope, $window, $timeout, $filter, $http, $resource, Translator, UsersManager, Registry)
 {
     window.scope = $scope;
+    $scope.routes = $window.routing;
+
     // Init {{
     var transformRequest = function(data, headersGetter)
     {
         delete data['todo_items'];
         return JSON.stringify(data);
     };
-    var TodoList = $resource(routing.endpoint_todo_list, {}, {
+    var TodoList = $resource($scope.routes.endpoint_todo_list, {}, {
         save:   {method:'POST', transformRequest: transformRequest},
         update: {method:'POST', transformRequest: transformRequest}
     });
-    var TodoItem = $resource(routing.endpoint_todo_item, {}, {
+    var TodoItem = $resource($scope.routes.endpoint_todo_item, {}, {
         update: {method:'POST'}
     });
 
-    $scope.routes = $window.routing;
     Translator.setTranslations($window.translations);
+    $scope.Translator = Translator;
     $scope.permissions = $window.permissions;;
 
     $scope.completed_todo_status = $window.completed_todo_status;

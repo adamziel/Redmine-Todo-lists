@@ -86,6 +86,7 @@
         assign_this_todo_to: <%=l(:label_assign_this_todo_to).to_json.html_safe%>,
         set_due_date: <%=l(:label_set_due_date).to_json.html_safe%>,
         no_due_date: <%=l(:label_no_due_date).to_json.html_safe%>,
+        completed_at: <%=l(:label_completed_at).to_json.html_safe%>,
         label_ajax_error: <%=l(:label_ajax_error).to_json.html_safe%>
     };
     window.assignable_users = <%=@assignable_users_json.html_safe%>;
@@ -238,7 +239,7 @@
                         <!--[#{{ todoItem.id }}]-->
                         {{ todoItem.subject }}
                       </a>
-                      (Completed)
+                      ({{ Translator.trans('completed_at') }} {{ todoItem.completed_at|date:"dd-MM-yyyy HH:mm" }})
                     </li>
                   </ol>
             </article>
