@@ -31,7 +31,7 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 ### Notes
 
 * 0% test coverage
-* Works with MySQL and PostgreSQL (and _probably_ with SQL server)
+* Works with MySQL and PostgreSQL
 * Tested only under firefox 23 and chrome 28 - it probably won't work well with IE (especially that angular.js is involved and no compability changes were performed)
 * Info for devs: I noticed that on dev server (WEBrick) managing issues sometimes results with an error 500 (error message points me to some other plugin I have). There are no problems on production server though.
 
