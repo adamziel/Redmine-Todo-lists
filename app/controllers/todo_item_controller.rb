@@ -3,28 +3,26 @@ class TodoItemController < ApplicationController
 
   before_filter :find_todo_list, :only => :create
   before_filter :find_todo_item, :only => [:toggle, :update, :delete]
-  before_filter :init_journal
-  before_filter :find_project
+  before_filter :init_journal, :find_project
 
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todos, @project)
+    
+    tracker = @project.trackers.find((params && params[:tracker_id]) || params[:tracker_id] || :first)
+    (render_error l(:error_no_tracker_in_project); return false) unless User.current.allowed_to?(:create_todos, @project)
 
     settings = Setting[:plugin_redmine_todos]
 
     @issue = Issue.new(
-        :author_id=>User.current.id,
-        :subject=>params[:subject_new],
-        :status_id=>settings[:uncompleted_todo_status],
+        :project => @project,
+        :tracker => tracker,
+        :author_id => User.current.id,
+        :subject => params[:subject_new],
+        :status_id => settings[:uncompleted_todo_status],
         :assigned_to_id => User.current.id,
         :due_date => params[:due_date_new],
         :assigned_to_id => params[:assigned_to_id_new]
     )
-    @issue.project = @project
-    @issue.tracker ||= @project.trackers.find((params && params[:tracker_id]) || params[:tracker_id] || :first)
-    if @issue.tracker.nil?
-      render_error l(:error_no_tracker_in_project)
-      return false
-    end
 
     todo_item = TodoItem.new(:todo_list_id=> @todo_list.id)
     success = self.do_save(todo_item, @issue)
@@ -50,7 +48,6 @@ class TodoItemController < ApplicationController
 
   def delete
     (render_403; return false) unless User.current.allowed_to?(:delete_todos, @project)
-    @todo_item.issue.delete()
     @todo_item.delete()
     return render :json => {:success => true}.to_json
   end
@@ -100,10 +97,10 @@ class TodoItemController < ApplicationController
   end
 
   def init_journal
-    if @todo_item.nil?
-      @journal = nil
+    @journal = if @todo_item.nil?
+      nil
     else
-      @journal = @todo_item.issue.init_journal(User.current)
+      @todo_item.issue.init_journal(User.current)
     end
   end
 
