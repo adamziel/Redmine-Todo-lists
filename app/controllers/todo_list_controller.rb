@@ -27,7 +27,7 @@ class TodoListController < ApplicationController
             .select('*')
             .each do |item|
                 for todo_list in todo_lists
-                  todo_list['subject'] =todo_list['name']
+                  todo_list['subject'] = todo_list['name']
                   if todo_list['id'] == item.todo_list_id
                     (todo_list['todo_items'] ||= []) << item.as_json
                     break
@@ -37,7 +37,7 @@ class TodoListController < ApplicationController
     @todo_lists_json = todo_lists.to_json
 
     @recently_completed_json = Hash.new{|h,k| h[k] = []}
-    if ActiveRecord::Base.connection.instance_values['config'][:adapter] == 'mysql'
+    if ActiveRecord::Base.connection.instance_values['config'][:adapter].include?('mysql')
       recently_completed = TodoItem.find_by_sql(
           %{
             select * from (
@@ -97,7 +97,9 @@ class TodoListController < ApplicationController
             left join issues on issues.id=todo_items.issue_id
             where issues.project_id = #{TodoItem.sanitize(@project.id)}
         }
-    ).each{|i|@comments_nbs[i['id']] = i['comments_nbs']}
+    ).each(:as => :hash) do |i|
+      @comments_nbs[i['id']] = i['comments_nbs']
+    end
   end
 
   def create
