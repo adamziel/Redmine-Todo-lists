@@ -14,15 +14,16 @@ class TodoItemController < ApplicationController
     settings = Setting[:plugin_redmine_todos]
 
     @issue = Issue.new(
-        :project => @project,
-        :tracker => tracker,
         :author_id => User.current.id,
         :subject => params[:subject_new],
         :status_id => settings[:uncompleted_todo_status],
-        :assigned_to_id => User.current.id,
         :due_date => params[:due_date_new],
         :assigned_to_id => params[:assigned_to_id_new]
     )
+    # Refactored that out of the above call because of issue #8:
+    # https://github.com/AZielinski/Redmine-Todo-lists/issues/8
+    @issue.project = @project
+    @issue.tracker = tracker
 
     todo_item = TodoItem.new(:todo_list_id=> @todo_list.id)
     success = self.do_save(todo_item, @issue)
