@@ -108,7 +108,7 @@ class TodoListController < ApplicationController
   protected
 
   def find_comments_nbs
-    comments_nbs_rs = ActiveRecord::Base.connection.execute(
+    comments_nbs_rs = ActiveRecord::Base.connection.select_all(
         %{
           select
             todo_items.id,
@@ -119,11 +119,9 @@ class TodoListController < ApplicationController
         }
     )
     comments_nbs = Hash.new
-    if comments_nbs_rs != -1
-      comments_nbs_rs.each do |i|
-        values = i.kind_of?(Hash) ? i.values : i
-        comments_nbs[values[0]] = values[1]
-      end
+    comments_nbs_rs.each do |i|
+      values = i.kind_of?(Hash) ? i.values : i
+      comments_nbs[values[0]] = values[1]
     end
     comments_nbs
   end
