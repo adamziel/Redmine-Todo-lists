@@ -119,9 +119,11 @@ class TodoListController < ApplicationController
         }
     )
     comments_nbs = Hash.new
-    if comments_nbs_rs != -1 then comments_nbs_rs.each do |i|
-      values = i.kind_of?(Hash) ? i.values : i
-      comments_nbs[values[0]] = values[1]
+    if comments_nbs_rs != -1
+      comments_nbs_rs.each do |i|
+        values = i.kind_of?(Hash) ? i.values : i
+        comments_nbs[values[0]] = values[1]
+      end
     end
     comments_nbs
   end
