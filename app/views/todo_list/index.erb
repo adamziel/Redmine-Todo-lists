@@ -193,8 +193,8 @@
                                   <!--[#{{ todoItem.id }}]-->
                                   {{ todoItem.subject }}
                                 </a>
-                                <due-assignee-pill todo-item="todoItem"></due-assignee-pill>
                                 <a class="pill" ng-show="todoItem.commentsNb" href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue_id} }}"><span class="details hasData"><span>{{ todoItem.commentsNb }} comment{{ todoItem.commentsNb>1?'s':'' }}</span></span></a>
+                                <due-assignee-pill todo-item="todoItem"></due-assignee-pill>
                             </div>
                         </span>
 
