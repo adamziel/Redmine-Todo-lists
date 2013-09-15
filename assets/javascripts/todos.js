@@ -328,6 +328,8 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
     };
 
     $scope.todoLists.data = $window.todoLists.map(function(list) {
+        list.subject = list.name;
+        delete list.name;
         if(list.todo_items)
         {
             if($window.recentlyCompleted[list.id])
@@ -396,13 +398,13 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
 
     $scope.createTodoList = function(resource) {
         if($scope.saveInProgress) return;
-        $scope.resetState();
+        // $scope.resetState();
         $scope.savingTodoList = true;
         $scope.saveInProgress = true;
         $scope.saveStarted = true;
         resource.$save({}, function(resource) {
             $scope.saveInProgress = false;
-            $scope.todoLists.data.push(resource);
+            $scope.todoLists.data.unshift(resource);
             $scope.prospects.todoList = new TodoList();
             $scope.setState('ducktypingTodoItem', resource.id);
         }, function() {
@@ -477,6 +479,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         var idx = $scope.findListById(id)[0];
         resource.$delete({id:id}, function() {
             $scope.todoLists.data.splice(idx, 1);
+            $scope.resetState();
         }, function() {
             alert('Sorry, there was an error :(');
             $scope.resetState();

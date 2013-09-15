@@ -131,7 +131,8 @@ due-assignee-pill > .pill .form .ui-datepicker-inline {
 }
 .controller-todo_list #todos_container > header .newTodoListForm > * > article {
   display: block;
-  margin-top: 60px;
+  margin-top: 49px;
+  padding-bottom: 16px;
 }
 .controller-todo_list #todos_container > header .action.pill {
   border: 1px solid #ccc;

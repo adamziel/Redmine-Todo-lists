@@ -27,7 +27,6 @@ class TodoListController < ApplicationController
             .select('*')
             .each do |item|
                 for todo_list in todo_lists
-                  todo_list['subject'] = todo_list['name']
                   if todo_list['id'] == item.todo_list_id
                     (todo_list['todo_items'] ||= []) << item.as_json
                     break
@@ -110,8 +109,8 @@ class TodoListController < ApplicationController
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todo_lists, @project)
 
-    list = TodoList.new(name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
-    list.save()
+    list = TodoList.create(name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
+    list.insert_at 1
     render :json => {:success => true}.merge(list.as_json).to_json
   end
 
