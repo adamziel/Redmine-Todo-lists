@@ -21,32 +21,22 @@ class TodoListController < ApplicationController
     wanted_issue_attrs = %w(subject status_id assigned_to_id due_date)
     todo_lists_ids = todo_lists.map { |tl| tl['id'] }
     TodoItem.where('issues.status_id != ?', @settings[:completed_todo_status])
-            .where('todo_items.todo_list_id in (?)', todo_lists_ids)
-            .includes(:issue)
-            .order('todo_items.position')
-            .select('*')
-            .each do |item|
-                for todo_list in todo_lists
-                  if todo_list['id'] == item.todo_list_id
-                    (todo_list['todo_items'] ||= []) << item.as_json
-                    break
-                  end
-                end
-            end
+    .where('todo_items.todo_list_id in (?)', todo_lists_ids)
+    .includes(:issue)
+    .order('todo_items.position')
+    .select('*')
+    .each do |item|
+      for todo_list in todo_lists
+        if todo_list['id'] == item.todo_list_id
+          (todo_list['todo_items'] ||= []) << item.as_json
+          break
+        end
+      end
+    end
     @todo_lists_json = todo_lists.to_json
 
-    comments_nbs_rs = ActiveRecord::Base.connection.execute(
-        %{
-          select
-            todo_items.id,
-            (select count(*) from journals where journals.journalized_type = 'Issue' and journals.journalized_id=issues.id and notes != '' and notes is not null) as comments_nbs
-          from todo_items
-            left join issues on issues.id=todo_items.issue_id
-            where issues.project_id = #{TodoItem.sanitize(@project.id)}
-        }
-    )
+    @comments_nbs = self.find_comments_nbs
 
-    @comments_nbs = Hash.new
     @recently_completed_json = Hash.new{|h,k| h[k] = []}
     if ActiveRecord::Base.connection.instance_values['config'][:adapter].include?('mysql')
       recently_completed = TodoItem.find_by_sql(
@@ -70,9 +60,6 @@ class TodoListController < ApplicationController
             where rank < 4
           }
       )
-      comments_nbs_rs.each(:as => :hash) do |i|
-        @comments_nbs[i['id']] = i['comments_nbs']
-      end
     else
       recently_completed = TodoItem.find_by_sql(
           %{
@@ -87,10 +74,8 @@ class TodoListController < ApplicationController
             ORDER BY todo_list_id, completed_at desc
           }
       )
-      comments_nbs_rs.each() do |i|
-        @comments_nbs[i['id']] = i['comments_nbs']
-      end
     end
+
     recently_completed.each do |row|
       hash = row.attributes.select do |key, value|
         %w(id position todo_list_id completed_at issue_id).include? key
@@ -133,7 +118,7 @@ class TodoListController < ApplicationController
     TodoList.transaction do
       handled_lists = []
       TodoList.where("id in (?)", params[:lists].keys())
-              .where(:project_id=>@project.id).each \
+      .where(:project_id=>@project.id).each \
       do |list|
         list.position = params[:lists][list.id.to_s]
         list.save!
@@ -141,8 +126,8 @@ class TodoListController < ApplicationController
       end
 
       TodoItem.includes(:todo_list)
-              .where("todo_items.id in (?)", params[:items].keys())
-              .where(todo_lists: { project_id: @project.id }).each \
+      .where("todo_items.id in (?)", params[:items].keys())
+      .where(todo_lists: { project_id: @project.id }).each \
       do |item|
         item.position = params[:items][item.id.to_s]
         new_parent_id = params[:items_parents][item.id.to_s].to_s
@@ -171,5 +156,27 @@ class TodoListController < ApplicationController
   def find_settings
     @settings = Setting[:plugin_redmine_todos]
   end
-  
+
+  protected
+
+  def find_comments_nbs
+    comments_nbs_rs = ActiveRecord::Base.connection.execute(
+        %{
+          select
+            todo_items.id,
+            (select count(*) from journals where journals.journalized_type = 'Issue' and journals.journalized_id=issues.id and notes != '' and notes is not null) as comments_nbs
+          from todo_items
+            left join issues on issues.id=todo_items.issue_id
+            where issues.project_id = #{TodoItem.sanitize(@project.id)}
+        }
+    )
+    comments_nbs = Hash.new
+    comments_nbs_rs.each do |i|
+      values = i.kind_of?(Hash) ? i.values : i
+      comments_nbs[values[0]] = values[1]
+    end
+    comments_nbs
+  end
+
 end
+
