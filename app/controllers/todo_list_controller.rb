@@ -18,7 +18,6 @@ class TodoListController < ApplicationController
       a['todo_items'] = []
       a
     end
-    wanted_issue_attrs = %w(subject status_id assigned_to_id due_date)
     todo_lists_ids = todo_lists.map { |tl| tl['id'] }
     TodoItem.where('issues.status_id != ?', @settings[:completed_todo_status])
     .where('todo_items.todo_list_id in (?)', todo_lists_ids)
@@ -129,6 +128,7 @@ class TodoListController < ApplicationController
 
   def find_recently_completed
     begin
+      wanted_issue_attrs = %w(subject status_id assigned_to_id due_date)
       recently_completed_json = Hash.new{|h,k| h[k] = []}
       if ActiveRecord::Base.connection.instance_values['config'][:adapter].include?('mysql')
         recently_completed = TodoItem.find_by_sql(
