@@ -36,6 +36,18 @@ class TodoListController < ApplicationController
             end
     @todo_lists_json = todo_lists.to_json
 
+    comments_nbs_rs = ActiveRecord::Base.connection.execute(
+        %{
+          select
+            todo_items.id,
+            (select count(*) from journals where journals.journalized_type = 'Issue' and journals.journalized_id=issues.id and notes != '' and notes is not null) as comments_nbs
+          from todo_items
+            left join issues on issues.id=todo_items.issue_id
+            where issues.project_id = #{TodoItem.sanitize(@project.id)}
+        }
+    )
+
+    @comments_nbs = Hash.new
     @recently_completed_json = Hash.new{|h,k| h[k] = []}
     if ActiveRecord::Base.connection.instance_values['config'][:adapter].include?('mysql')
       recently_completed = TodoItem.find_by_sql(
@@ -59,6 +71,9 @@ class TodoListController < ApplicationController
             where rank < 4
           }
       )
+      comments_nbs_rs.each(:as => :hash) do |i|
+        @comments_nbs[i['id']] = i['comments_nbs']
+      end
     else
       recently_completed = TodoItem.find_by_sql(
           %{
@@ -73,6 +88,9 @@ class TodoListController < ApplicationController
             ORDER BY todo_list_id, completed_at desc
           }
       )
+      comments_nbs_rs.each() do |i|
+        @comments_nbs[i['id']] = i['comments_nbs']
+      end
     end
     recently_completed.each do |row|
       hash = row.attributes.select do |key, value|
@@ -87,19 +105,6 @@ class TodoListController < ApplicationController
     end
     @recently_completed_json = @recently_completed_json.to_json
 
-    @comments_nbs = Hash.new
-    ActiveRecord::Base.connection.execute(
-        %{
-          select
-            todo_items.id,
-            (select count(*) from journals where journals.journalized_type = 'Issue' and journals.journalized_id=issues.id and notes != '' and notes is not null) as comments_nbs
-          from todo_items
-            left join issues on issues.id=todo_items.issue_id
-            where issues.project_id = #{TodoItem.sanitize(@project.id)}
-        }
-    ).each(:as => :hash) do |i|
-      @comments_nbs[i['id']] = i['comments_nbs']
-    end
   end
 
   def create
