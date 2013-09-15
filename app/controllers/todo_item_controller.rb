@@ -49,6 +49,7 @@ class TodoItemController < ApplicationController
   def delete
     (render_403; return false) unless User.current.allowed_to?(:delete_todos, @project)
     @todo_item.delete()
+    @todo_item.issue.delete()
     return render :json => {:success => true}.to_json
   end
 
