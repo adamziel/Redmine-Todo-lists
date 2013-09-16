@@ -7,11 +7,11 @@ class TodoItemController < ApplicationController
 
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todos, @project)
-    
-    tracker = @project.trackers.find((params && params[:tracker_id]) || params[:tracker_id] || :first)
-    (render_error l(:error_no_tracker_in_project); return false) unless User.current.allowed_to?(:create_todos, @project)
 
     settings = Setting[:plugin_redmine_todos]
+
+    tracker = @project.trackers.find(settings.default_tracker || (params && params[:tracker_id]) || :first)
+    (render_error l(:error_no_tracker_in_project); return false) unless User.current.allowed_to?(:create_todos, @project)
 
     @issue = Issue.new(
         :author_id => User.current.id,

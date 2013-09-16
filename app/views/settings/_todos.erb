@@ -1,9 +1,11 @@
+<% trackers = Tracker.order(:position).all().map do |tracker| [tracker.id, tracker.name] end %>
 <% statuses = IssueStatus.all().map do |status| [status.id, status.name] end %>
 <% statuses_hash = Hash[statuses.each_slice(2).to_a]  %>
 
 <p>
   <label><%= l(:label_todo_list_uncompleted_todo_status) %></label>
   <select name="settings[uncompleted_todo_status]">
+    <option>-- choose --</option>
     <% for k,v in statuses %>
       <option value="<%=k%>" <%= k.to_s == @settings[:uncompleted_todo_status].to_s ? 'selected="true"':''%>><%=v%></option>
     <% end %>
@@ -13,8 +15,20 @@
 <p>
   <label><%= l(:label_todo_list_completed_todo_status) %></label>
   <select name="settings[completed_todo_status]">
+    <option>-- choose --</option>
     <% for k,v in statuses %>
         <option value="<%=k%>" <%= k.to_s == @settings[:completed_todo_status].to_s ? 'selected="true"':''%>><%=v%></option>
+    <% end %>
+  </select>
+</p>
+
+
+<p>
+  <label><%= l(:label_todos_default_tracker) %></label>
+  <select name="settings[default_tracker]">
+    <option>-- choose --</option>
+    <% for k,v in trackers %>
+        <option value="<%=k%>" <%= k.to_s == @settings[:default_tracker].to_s ? 'selected="true"':''%>><%=v%></option>
     <% end %>
   </select>
 </p>

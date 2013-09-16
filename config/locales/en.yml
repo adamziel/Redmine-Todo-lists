@@ -22,6 +22,7 @@ en:
 
   label_todo_list_uncompleted_todo_status: Uncompleted todo should be reflected by which issue status?
   label_todo_list_completed_todo_status:   Completed todo should be reflected by which issue status?
+  label_todos_default_tracker:             Default tracker for each issue created by this plugin
 
   label_add_first_todo_list: Add your first to-do list!
   label_configure_plugin:    You have to configure this plugin before using it - go to admin > plugins > To-do lists and choose your preferences!
