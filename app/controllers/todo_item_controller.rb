@@ -10,7 +10,10 @@ class TodoItemController < ApplicationController
 
     settings = Setting[:plugin_redmine_todos]
 
-    tracker = @project.trackers.find(settings.default_tracker || (params && params[:tracker_id]) || :first)
+    if not settings.include? :default_tracker
+      settings[:default_tracker] = -1
+    end
+    tracker = @project.trackers.find(settings[:default_tracker] || (params && params[:tracker_id]) || :first)
     (render_error l(:error_no_tracker_in_project); return false) unless User.current.allowed_to?(:create_todos, @project)
 
     @issue = Issue.new(
