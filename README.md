@@ -39,5 +39,5 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 
 I use a local redmine installation to keep things organized. I created this plugin for myself, but I thought it might be useful for someone somewhere.
 
-By no means I am a rails programmer - this is the first piece of ruby code I wrote in my life and there are probably some horrible mistakes in there. I did it only because I desperately lacked some user-friendly interface for todos management and there was no plugin available for that. If you find any bugs, you are welcome to fork this repo or open a Pull Request.
+By no means I am a rails programmer - this is the first piece of ruby code I wrote in my life and there are probably some horrible mistakes in there. I didn't create this plugin as a perfect example of code for all to see, I created it because I desperately lacked some user-friendly interface for todos management and there was no plugin available for that. If you find any bugs, you are welcome to fork this repo or open a Pull Request.
 
