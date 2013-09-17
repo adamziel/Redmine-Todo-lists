@@ -1,0 +1,45 @@
+# Simplified Chinese strings go here for Rails i18n
+# Author: Steven.W
+# Based on file: en.yml
+zh:
+  project_module_todos_module: "待办事项"
+
+  label_todo_plural: 待办事项
+  label_todo_list_plural: 待办清单
+
+  label_add_todo_list: 添加待办列表
+  label_new_todo_list_input_placeholder: 请填写您的待办列表标题
+  label_save_new_list: 保存并开始添加待办事项
+  label_or: 或
+  label_cancel: 取消
+
+  label_edit: 编辑
+  label_delete: 删除
+  label_save_changes: 保存变更
+
+  label_add_a_todo: 添加待办事项
+  label_add_this_todo: 添加改待办事项
+  label_add_new_todo_placeholder: 添加一个新待办事项
+  label_done_adding_todos: 已添加待办事项。
+
+  label_todo_list_uncompleted_todo_status: 未完成的待办事项应关联到哪个状态？
+  label_todo_list_completed_todo_status:   已完成的待办事项应关联到哪个状态？Completed todo should be reflected by which issue status?
+  label_todos_default_tracker:             本插件创建的问题的默认跟踪类型
+
+  label_add_first_todo_list: 添加您的首个待办列表！
+  label_configure_plugin:    您必须在使用本插件前先进行相关配置！请进入【管理】——>【插件】，找到To-do lists插件并设置您的参数！
+
+  label_unassigned: 未分配
+  label_set_due_date: "设置计划完成日期"
+  label_no_due_date: "无计划完成日期"
+  label_assign_this_todo_to: "分配待办事项给"
+  label_completed_at: "完成于"
+  label_ajax_error: "抱歉，在处理您提交的请求时发生了系统错误，请联系Redmine系统管理员解决！"
+
+  permission_view_todo_lists: "查看待办列表"
+  permission_create_todo_lists: "创建待办列表"
+  permission_update_todo_lists: "更新待办列表"
+  permission_delete_todo_lists: "删除代办列表"
+  permission_create_todos: "创建待办事项"
+  permission_update_todos: "更新待办事项"
+  permission_delete_todos: "删除待办事项"
