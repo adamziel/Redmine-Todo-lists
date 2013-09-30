@@ -237,7 +237,7 @@
                     <li ng-repeat="todoItem in todoList.todo_items | filter:isTodoCompletedFactory(true) | orderBy:'completed_at':true | limitTo:2 track by $index">
                       <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
 
-                      <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.id} }}" ng-hide="todoItem.editMode.formVisible">
+                      <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue_id} }}" ng-hide="todoItem.editMode.formVisible">
                         <!--[#{{ todoItem.id }}]-->
                         {{ todoItem.subject }}
                       </a>
