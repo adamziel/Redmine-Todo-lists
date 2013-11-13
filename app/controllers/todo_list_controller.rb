@@ -45,7 +45,7 @@ class TodoListController < ApplicationController
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todo_lists, @project)
 
-    list = TodoList.create(is_private: params[:is_private] || false, name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
+    list = TodoList.create(is_private: (params[:is_private] || false) ? 1 : 0, name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
     list.insert_at 1
     render :json => {:success => true}.merge(list.as_json).to_json
   end
@@ -54,7 +54,7 @@ class TodoListController < ApplicationController
     (render_403; return false) unless User.current.allowed_to?(:update_todo_lists, @project)
 
     @todo_list.name = params[:subject_new]
-    @todo_list.is_private = params[:is_private] || false
+    @todo_list.is_private = (params[:is_private] || false) ? 1 : 0
     render :json => {:success => @todo_list.save()}.merge(@todo_list.as_json)
   end
 
