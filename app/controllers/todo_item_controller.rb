@@ -21,7 +21,7 @@ class TodoItemController < ApplicationController
         :subject => params[:subject_new],
         :status_id => settings[:uncompleted_todo_status],
         :due_date => params[:due_date_new],
-        :is_private => params[:is_private],
+        :is_private => params[:is_private] || false,
         :assigned_to_id => params[:assigned_to_id_new]
     )
     # Refactored that out of the above call because of issue #8:

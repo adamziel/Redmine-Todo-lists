@@ -18,6 +18,7 @@
             <input type="checkbox" disabled="true" ng-show="withCheckbox" />
             <textarea class="newEntry"
                     placeholder="{{ placeholder }}"
+                    maxlength="255"
                     ng-enter="save()"
                     ng-model="getResource().subject_new"
                     ng-focus="isActive"
