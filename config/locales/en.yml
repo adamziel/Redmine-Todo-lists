@@ -32,7 +32,7 @@ en:
   label_no_due_date: "No due date"
   label_assign_this_todo_to: "Assign this to-do to"
   label_completed_at: "Completed at"
-  label_ajax_error: "Sorry, there was an error while processing your request!"
+  label_ajax_error: "Sorry, there was an error while processing your request! Check browser's or webrick's console or server logs for more details."
 
   label_make_this_todo_private: "Make this to-do private"
 

@@ -208,6 +208,7 @@ angular
                             scope.todoItem = resource;
                         }, function() {
                             alert(Translator.trans("label_ajax_error"));
+                            $log.error(response);
                             scope.saveInProgress = false;
 
                         });

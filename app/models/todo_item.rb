@@ -20,4 +20,8 @@ class TodoItem < ActiveRecord::Base
     }
   end
 
+  def user_has_permissions(user)
+    return ((self.issue.is_private == false) or (user and (self.issue.author_id == user.id) or (self.issue.assigned_to_id == user.id)))
+  end
+
 end

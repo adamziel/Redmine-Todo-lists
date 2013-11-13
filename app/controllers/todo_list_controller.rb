@@ -20,6 +20,7 @@ class TodoListController < ApplicationController
     end
     todo_lists_ids = todo_lists.map { |tl| tl['id'] }
     TodoItem.where('issues.status_id != ?', @settings[:completed_todo_status])
+            .where('issues.is_private = false or issues.assigned_to_id = ? or issues.author_id = ?', User.current.id, User.current.id)
             .where('todo_items.todo_list_id in (?)', todo_lists_ids)
             .includes(:issue)
             .order('todo_items.position')

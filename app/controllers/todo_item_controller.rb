@@ -56,6 +56,7 @@ class TodoItemController < ApplicationController
 
   def delete
     (render_403; return false) unless User.current.allowed_to?(:delete_todos, @project)
+    has_permissions
     @todo_item.delete()
     @todo_item.issue.delete() # Needed for PostgreSQL adapter which does not seem to delete this automatically
     return render :json => {:success => true}.to_json
@@ -103,6 +104,8 @@ class TodoItemController < ApplicationController
 
   def find_todo_item
     @todo_item = TodoItem.includes(:issue).find(params[:id])
+    has_perms = @todo_item.user_has_permissions(User.current)
+    (render_403; return false) unless has_perms
   end
 
   def init_journal
