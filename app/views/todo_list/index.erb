@@ -38,7 +38,7 @@
           Loading...
         </span>
         <span ng-show="isError">
-            Server returned error 500 :(
+            Server returned an error, check console for more information.
         </span>
       </footer>
     </form>
@@ -49,6 +49,7 @@
     <div class="pill" click-outside="isFormVisible=false">
       <span class="details" ng-class="(isFormVisible || saveInProgress ? ' active' : '')+(todoItem.due_date || assignedToName() ? ' hasData' : ' empty')">
         <span ng-hide="saveInProgress" ng-click="isFormVisible = !isFormVisible">
+            <span ng-show="todoItem.is_private" class="padlock"></span>
             <span ng-show="todoItem.due_date">{{ todoItem.due_date|date:"dd-MM-yyyy" }}</span>
             <span ng-show="!todoItem.due_date && !assignedToName()">{{ Translator.trans("unassigned") }}</span>
             <span ng-show="todoItem.due_date && assignedToName()">·</span>
@@ -70,6 +71,14 @@
           <div ui-date="dateOptions" name="DateOfBirth" ng-model="todoItem.due_date_new" ui-date-format="yy-mm-dd"></div>
           <span class="a-like nodue" ng-click="todoItem.due_date_new = null">{{ Translator.trans("no_due_date") }}</span>
         </section>
+
+        <section class="isPrivate">
+          <b>
+            <input type="checkbox" ng-model="todoItem.is_private_new" id="is_private_{{ todoItem.id }}" />
+            <label ng-click="todoItem.is_private_new = !todoItem.is_private_new">{{ Translator.trans("label_make_this_todo_private") }}</label>
+          </b>
+        </section>
+
         <div class="pointer top left"><div></div></div>
       </div>
     </div>
@@ -87,7 +96,8 @@
         set_due_date: <%=l(:label_set_due_date).to_json.html_safe%>,
         no_due_date: <%=l(:label_no_due_date).to_json.html_safe%>,
         completed_at: <%=l(:label_completed_at).to_json.html_safe%>,
-        label_ajax_error: <%=l(:label_ajax_error).to_json.html_safe%>
+        label_ajax_error: <%=l(:label_ajax_error).to_json.html_safe%>,
+        label_make_this_todo_private: <%=l(:label_make_this_todo_private).to_json.html_safe%>
     };
     window.assignable_users = <%=@assignable_users_json.html_safe%>;
     window.permissions = {

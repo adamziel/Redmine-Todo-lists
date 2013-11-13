@@ -13,6 +13,7 @@ class TodoItem < ActiveRecord::Base
         :issue_id => self.issue_id,
         :todo_list_id => self.todo_list_id,
         :subject => self.issue.subject,
+        :is_private => self.issue.is_private,
         :status_id => self.issue.status_id,
         :assigned_to_id => self.issue.assigned_to_id,
         :due_date => self.issue.due_date

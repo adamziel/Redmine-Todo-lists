@@ -54,6 +54,12 @@ todo-resource-edit-form .withCheckbox footer {
 due-assignee-pill {
   display: inline-block;
 }
+due-assignee-pill > .pill .padlock {
+  display: inline-block;
+  width: 12px;
+  height: 16px;
+  background: url(../images/padlock-closed.png);
+}
 due-assignee-pill > .pill .form {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -104,6 +110,9 @@ due-assignee-pill > .pill .form > section.due .nodue {
   margin-top: 10px;
   text-align: center;
   text-decoration: underline !important;
+}
+due-assignee-pill > .pill .form > section.isPrivate label {
+  cursor: pointer;
 }
 due-assignee-pill > .pill .form .ui-datepicker-inline {
   box-shadow: none;

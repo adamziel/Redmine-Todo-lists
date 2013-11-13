@@ -21,6 +21,7 @@ class TodoItemController < ApplicationController
         :subject => params[:subject_new],
         :status_id => settings[:uncompleted_todo_status],
         :due_date => params[:due_date_new],
+        :is_private => params[:is_private],
         :assigned_to_id => params[:assigned_to_id_new]
     )
     # Refactored that out of the above call because of issue #8:
@@ -44,6 +45,9 @@ class TodoItemController < ApplicationController
         end
         if params.include? :due_date_new
           @todo_item.issue.due_date = params[:due_date_new] ? Time.parse(params[:due_date_new]) : nil
+        end
+        if params.include? :is_private_new
+          @todo_item.issue.is_private = !!params[:is_private_new]
         end
       end
     end

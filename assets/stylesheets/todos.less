@@ -73,6 +73,13 @@ due-assignee-pill {
 
   > .pill {
 
+    .padlock {
+      display: inline-block;
+      width: 12px;
+      height: 16px;
+      background: url(../images/padlock-closed.png);
+    }
+
     .form {
       .border-box;
       @pointerSize: 15px;
@@ -139,6 +146,12 @@ due-assignee-pill {
             margin-top: 10px;
             text-align: center;
             text-decoration: underline !important;
+          }
+        }
+
+        &.isPrivate {
+          label {
+            cursor: pointer;
           }
         }
       }

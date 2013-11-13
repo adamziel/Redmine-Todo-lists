@@ -34,6 +34,8 @@ en:
   label_completed_at: "Completed at"
   label_ajax_error: "Sorry, there was an error while processing your request!"
 
+  label_make_this_todo_private: "Make this to-do private"
+
   permission_view_todo_lists: "View todo lists"
   permission_create_todo_lists: "Create todo lists"
   permission_update_todo_lists: "Update todo lists"

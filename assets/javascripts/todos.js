@@ -142,7 +142,7 @@ angular
         };
     })
 
-    .directive('dueAssigneePill', function($window, $parse, Translator, UsersManager, Registry) {
+    .directive('dueAssigneePill', function($window, $parse, $timeout, Translator, UsersManager, Registry) {
         return {
             restrict: "E",
             template: $window.dueAssigneePillTemplate,
@@ -171,16 +171,24 @@ angular
                         {
                             scope.todoItem.due_date_new = scope.todoItem.due_date;
                             scope.todoItem.assigned_to_id_new = scope.todoItem.assigned_to_id;
+                            scope.todoItem.is_private_new = scope.todoItem.is_private;
+                        }
+                        if(justSetDetails)
+                        {
+                            $timeout(function() {
+                                justSetDetails = false;
+                            }, 0)
                         }
                     }
                 });
 
                 var initializing = !forNewTodo;
-                scope.$watch('[todoItem.due_date_new, todoItem.assigned_to_id_new]', function(newT, oldT) {
+                scope.$watch('[todoItem.due_date_new, todoItem.assigned_to_id_new, todoItem.is_private_new]', function(newT, oldT) {
                     if(forNewTodo)
                     {
                         Registry.set('due_date_new', newT[0]);
                         Registry.set('assigned_to_id_new', newT[1]);
+                        Registry.set('is_private_new', newT[2]);
                     }
                     if(initializing || justSetDetails || scope.saveInProgress)
                     {
@@ -206,6 +214,7 @@ angular
                     } else {
                         scope.todoItem.due_date = scope.todoItem.due_date_new;
                         scope.todoItem.assigned_to_id = scope.todoItem.assigned_to_id_new;
+                        scope.todoItem.is_private = scope.todoItem.is_private_new;
                     }
                 }, true);
                 scope.assignedToName = function() {
@@ -268,7 +277,7 @@ angular
     })
 ;
 
-function TodoListController($scope, $window, $timeout, $filter, $http, $resource, Translator, UsersManager, Registry)
+function TodoListController($scope, $window, $timeout, $filter, $http, $log, $resource, Translator, UsersManager, Registry)
 {
     window.scope = $scope; // just for easier debugging
 
@@ -319,6 +328,8 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             this.todoItem.due_date_new = Registry.get('due_date_new');
             this.todoItem.assigned_to_id = userId || Registry.get('assigned_to_id_new')
             this.todoItem.assigned_to_id_new = userId || Registry.get('assigned_to_id_new')
+            this.todoItem.is_private = Registry.get('is_private_new')
+            this.todoItem.is_private_new = Registry.get('is_private_new')
         }
     };
     $scope.prospects.recreateTodoItem(UsersManager.getCurrentUserId());
@@ -407,7 +418,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             $scope.todoLists.data.unshift(resource);
             $scope.prospects.todoList = new TodoList();
             $scope.setState('ducktypingTodoItem', resource.id);
-        }, function() {
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.setState('ducktypingTodoList');
             $scope.saveInProgress = false;
             $scope.saveError = true;
@@ -431,7 +444,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
             $scope.prospects.recreateTodoItem();
             $scope.setState('ducktypingTodoItem', todo_list_id);
 
-        }, function() {
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.setState('ducktypingTodoItem', todo_list_id);
             $scope.saveInProgress = false;
             $scope.saveError = true;
@@ -448,7 +463,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         resource.$update({id:resource.id}, function(resource) {
             $scope.resetState();
             (success||$.noop)(resource);
-        }, function() {
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.saveInProgress = false;
             $scope.saveError = true;
         });
@@ -463,7 +480,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         resource.$update({id:resource.id}, function(resource) {
             $scope.resetState();
             (success||$.noop)(resource);
-        }, function() {
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.saveInProgress = false;
             $scope.saveError = true;
         });
@@ -480,8 +499,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         resource.$delete({id:id}, function() {
             $scope.todoLists.data.splice(idx, 1);
             $scope.resetState();
-        }, function() {
-            alert('Sorry, there was an error :(');
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.resetState();
         });
     };
@@ -500,8 +520,9 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $resource
         resource.$delete({id: id}, function(resource) {
             list.todo_items.splice(itemIdx, 1);
             $scope.resetState();
-        }, function() {
-            alert('Sorry, there was an error :(');
+        }, function(response) {
+            alert(Translator.trans("label_ajax_error"));
+            $log.error(response);
             $scope.resetState();
         });
     };
