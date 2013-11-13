@@ -42,7 +42,7 @@
           Loading...
         </span>
         <span ng-show="isError">
-            Server returned an error, check console for more information.
+            {{ errorMessage || 'Server returned an error, check console for more information.' }}
         </span>
       </footer>
     </form>
@@ -150,6 +150,7 @@
                 is-active="ducktypingTodoList"
                 is-in-progress="saveInProgress"
                 is-error="saveError"
+                error-message="errorMessage"
                 save-callback="createTodoList"></todo-resource-edit-form>
         </article>
         <ol class="completed"> </ol>
@@ -190,6 +191,7 @@
                     is-active="editingTodoList == todoList.id"
                     is-in-progress="saveInProgress"
                     is-error="saveError"
+                    error-message="errorMessage"
                     on-cancel="setState('editingTodoItem', false)"
                     save-callback="updateTodoList"></todo-resource-edit-form>
             </header>
@@ -226,6 +228,7 @@
                             is-active="editingTodoItem == todoItem.id"
                             is-in-progress="saveInProgress"
                             is-error="saveError"
+                            error-message="errorMessage"
                             on-cancel="setState('editingTodoItem', false)"
                             save-callback="updateTodo"></todo-resource-edit-form>
 
@@ -248,6 +251,7 @@
                         is-active="ducktypingTodoItem === todoList.id"
                         is-in-progress="saveInProgress"
                         is-error="saveError"
+                        error-message="errorMessage"
                         on-cancel="setState('ducktypingTodoItem', false)"
                         save-callback="createTodo"></todo-resource-edit-form>
                   </footer>

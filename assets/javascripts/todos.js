@@ -109,6 +109,7 @@ angular
                 isActive: '=',
                 isInProgress: '=',
                 isError: '=',
+                errorMessage: '=',
                 saveCallback: '='
             },
             link: function(scope, iElement, iAttrs) {
@@ -207,9 +208,10 @@ angular
                             justSetDetails = true;
                             scope.saveInProgress = false;
                             scope.todoItem = resource;
-                        }, function() {
+                        }, function(response) {
                             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
                             $log.error(response);
+                            if(response.data) $scope.errorMessage = response.data.message;
                             scope.saveInProgress = false;
 
                         });
@@ -423,6 +425,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         }, function(response) {
             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
             $log.error(response);
+            if(response.data) $scope.errorMessage = response.data.message;
             $scope.setState('ducktypingTodoList');
             $scope.saveInProgress = false;
             $scope.saveError = true;
@@ -448,7 +451,8 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
 
         }, function(response) {
             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
-            $log.error(response);
+            $log.error(response.data.message);
+            if(response.data) $scope.errorMessage = response.data.message;
             $scope.setState('ducktypingTodoItem', todo_list_id);
             $scope.saveInProgress = false;
             $scope.saveError = true;
@@ -468,6 +472,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         }, function(response) {
             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
             $log.error(arguments, response);
+            if(response.data) $scope.errorMessage = response.data.message;
             $scope.saveInProgress = false;
             $scope.saveError = true;
         });
@@ -485,6 +490,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         }, function(response) {
             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
             $log.error(response);
+            if(response.data) $scope.errorMessage = response.data.message;
             $scope.saveInProgress = false;
             $scope.saveError = true;
         });
@@ -525,6 +531,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         }, function(response) {
             alert(Translator.trans("label_ajax_error")+ " HTTP status:"+response.status);
             $log.error(response);
+            if(response.data) $scope.errorMessage = response.data.message;
             $scope.resetState();
         });
     };

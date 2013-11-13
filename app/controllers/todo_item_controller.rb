@@ -13,8 +13,13 @@ class TodoItemController < ApplicationController
     if not settings.include? :default_tracker
       settings[:default_tracker] = false
     end
-    tracker = @project.trackers.find(settings[:default_tracker] || (params && params[:tracker_id]) || :first)
-    (render_error l(:error_no_tracker_in_project); return false) unless User.current.allowed_to?(:create_todos, @project)
+
+    begin
+      tracker = @project.trackers.find(settings[:default_tracker] || (params && params[:tracker_id]) || :first)
+    rescue ActiveRecord::RecordNotFound
+      return render :status=>500, :json => {:success => false, :message => l(:error_no_tracker_in_project) }
+    end
+    (return render :status=>500, :json => {:success => false, :message => l(:label_insufficient_permissions) } ; return false) unless User.current.allowed_to?(:create_todos, @project)
 
     @issue = Issue.new(
         :author_id => User.current.id,
