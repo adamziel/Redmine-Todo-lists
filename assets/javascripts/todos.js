@@ -82,7 +82,7 @@ angular
             link: function(scope, elem, attr, ctrl) {
                 $document.on('click', function(e) {
                     var $target = $(e.target);
-                    if(!elem.has($target).length && !elem.is($target) && !$target.closest('.ui-datepicker-header'))
+                    if(!elem.has($target).length && !elem.is($target) && !$target.closest('.ui-datepicker-header').length)
                     {
                         scope.$apply(attr.clickOutside);
                     }
