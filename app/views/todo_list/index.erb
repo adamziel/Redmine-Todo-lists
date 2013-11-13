@@ -25,6 +25,9 @@
             <span ng-if="withDueAssigneePill">
                 <due-assignee-pill todo-item="getResource()" for-new-todo="true" />
             </span>
+            <span ng-if="withPadLock">
+                <span class="padlock widget" ng-class="{active: getResource().is_private}" ng-click="getResource().is_private = !getResource().is_private"></span>
+            </span>
         </header>
 
       <footer>
@@ -47,7 +50,7 @@
 
 <script type="text/ng-template" id="dueAssigneePill.html">
     <div class="pill" click-outside="isFormVisible=false">
-      <span class="details" ng-class="(isFormVisible || saveInProgress ? ' active' : '')+(todoItem.due_date || assignedToName() ? ' hasData' : ' empty')">
+      <span class="details" ng-class="(isFormVisible || saveInProgress ? ' active' : '')+(todoItem.due_date || todoItem.is_private || assignedToName() ? ' hasData' : ' empty')">
         <span ng-hide="saveInProgress" ng-click="isFormVisible = !isFormVisible">
             <span ng-show="todoItem.is_private" class="padlock"></span>
             <span ng-show="todoItem.due_date">{{ todoItem.due_date|date:"dd-MM-yyyy" }}</span>
@@ -142,6 +145,7 @@
                 label-save-changes='<%= l(:label_save_new_list).to_json %>'
                 resource="prospects.todoList"
 
+                with-pad-lock="1"
                 is-active="ducktypingTodoList"
                 is-in-progress="saveInProgress"
                 is-error="saveError"
@@ -171,13 +175,17 @@
                 </aside>
 
                 <span ng-hide="editingTodoList == todoList.id">
-                    <h3>{{ todoList.subject }}</h3>
+                    <h3>
+                      {{ todoList.subject }}
+                      <span class="padlock" ng-if="todoList.is_private"></span>
+                    </h3>
                 </span>
 
                 <todo-resource-edit-form
                     label-save-changes='<%= l(:label_save_changes).to_json %>'
                     resource="todoList"
 
+                    with-pad-lock="1"
                     is-active="editingTodoList == todoList.id"
                     is-in-progress="saveInProgress"
                     is-error="saveError"

@@ -14,9 +14,13 @@ class TodoList < ActiveRecord::Base
   def as_json(options=nil)
     {
         :id => self.id,
-        :subject => self.name
+        :subject => self.name,
+        :is_private => self.is_private
     }
   end
 
+  def user_has_permissions(user)
+    return ((self.is_private == false) or (user and (self.author_id == user.id)))
+  end
 
 end

@@ -101,6 +101,7 @@ angular
                 labelSaveChanges: '=',
                 labelCancel: '=',
                 withCheckbox: '=',
+                withPadLock: '@',
                 withDueAssigneePill: '=',
 
                 resource: '=',

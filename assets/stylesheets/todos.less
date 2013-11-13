@@ -68,17 +68,27 @@ todo-resource-edit-form {
   }
 }
 
+
+.padlock {
+  display: inline-block;
+  width: 12px;
+  height: 14px;
+  background: url(../images/padlock-closed.png);
+  cursor: pointer;
+
+  &.widget {
+    opacity: 0.5;
+
+    &:hover,
+    &.active {
+      opacity: 1;
+    }
+  }
+}
+
 due-assignee-pill {
   display: inline-block;
-
   > .pill {
-
-    .padlock {
-      display: inline-block;
-      width: 12px;
-      height: 16px;
-      background: url(../images/padlock-closed.png);
-    }
 
     .form {
       .border-box;

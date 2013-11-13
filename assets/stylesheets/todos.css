@@ -9,7 +9,7 @@
   visibility: visible;
 }
 textarea.newEntry {
-  width: 75%;
+  width: 60%;
   height: 1.1em;
   resize: none;
   border: none;
@@ -51,14 +51,22 @@ todo-resource-edit-form .withCheckbox footer {
   background: #000;
   color: #FFF;
 }
-due-assignee-pill {
-  display: inline-block;
-}
-due-assignee-pill > .pill .padlock {
+.padlock {
   display: inline-block;
   width: 12px;
-  height: 16px;
+  height: 14px;
   background: url(../images/padlock-closed.png);
+  cursor: pointer;
+}
+.padlock.widget {
+  opacity: 0.5;
+}
+.padlock.widget:hover,
+.padlock.widget.active {
+  opacity: 1;
+}
+due-assignee-pill {
+  display: inline-block;
 }
 due-assignee-pill > .pill .form {
   box-sizing: border-box;

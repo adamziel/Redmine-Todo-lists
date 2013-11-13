@@ -13,7 +13,7 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 
 ### Caveats
 
-1. As you probably noticed - it is really important to put it in the plugins/redmine_todos directory, if you forgot to rename the directory, you should rename it and rerun `rake redmine:plugins:migrate RAILS_ENV=.`
+1. As you probably noticed - it is really important to put it in the plugins/redmine_todos directory, if you forgot to rename the directory, you should rename it and rerun `rake redmine:plugins:migrate RAILS_ENV=...`
 
 ### Features
 

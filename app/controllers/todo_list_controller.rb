@@ -13,7 +13,9 @@ class TodoListController < ApplicationController
     # @settings[:uncompleted_todo_status]
     @assignable_users_json = @project.users.to_json :only => [:id, :firstname, :lastname]
 
-    todo_lists = TodoList.where(:project_id=>@project.id).order("todo_lists.position").map do |i|
+    todo_lists = TodoList.where(:project_id=>@project.id)
+                         .where('todo_lists.is_private = false or todo_lists.author_id = ?', User.current.id)
+                         .order("todo_lists.position").map do |i|
       a = i.attributes
       a['todo_items'] = []
       a
@@ -43,7 +45,7 @@ class TodoListController < ApplicationController
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todo_lists, @project)
 
-    list = TodoList.create(name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
+    list = TodoList.create(is_private: params[:is_private], name: params[:subject_new], project_id: @project.id, author_id: User.current.id)
     list.insert_at 1
     render :json => {:success => true}.merge(list.as_json).to_json
   end
@@ -52,6 +54,7 @@ class TodoListController < ApplicationController
     (render_403; return false) unless User.current.allowed_to?(:update_todo_lists, @project)
 
     @todo_list.name = params[:subject_new]
+    @todo_list.is_private = params[:is_private]
     render :json => {:success => @todo_list.save()}.merge(@todo_list.as_json)
   end
 
@@ -93,6 +96,8 @@ class TodoListController < ApplicationController
 
   def find_todo_list
     @todo_list = TodoList.where(:id => params[:id], :project_id=>@project.id).first
+    has_perms = @todo_list.user_has_permissions(User.current)
+    (render_403; return false) unless has_perms
   end
 
   # This is actually not the same as in the parent class - we are looking for :project_id instead of :id
