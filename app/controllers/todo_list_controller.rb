@@ -158,7 +158,7 @@ class TodoListController < ApplicationController
               where rank < 4
             }
         )
-      else
+      elsif ActiveRecord::Base.connection.instance_values['config'][:adapter].include?('postgres')
         recently_completed = TodoItem.find_by_sql(
             %{
               SELECT ranked_items.* FROM
