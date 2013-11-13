@@ -76,14 +76,13 @@ angular
         }
     })
 
-    .directive('clickOutside', function($document, $timeout){
+    .directive('clickOutside', function($document){
         return {
             restrict: 'A',
             link: function(scope, elem, attr, ctrl) {
-                $document.on('click', '*', function(e) {
+                $document.on('click', function(e) {
                     var $target = $(e.target);
-                    var parents = $target.parents().addBack();
-                    if(!parents.filter(elem).length && !parents.filter('.ui-datepicker-header').length)
+                    if(!elem.has($target).length && !elem.is($target) && !$target.closest('.ui-datepicker-header'))
                     {
                         scope.$apply(attr.clickOutside);
                     }
