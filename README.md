@@ -18,6 +18,7 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 ### Features
 
 * To-do lists management
+* Private to-dos and to-do lists
 * Very friendly Ajax UI - heavily inspired by basecamp and created with Angular.js
 * Enter To-do items as simple as: type, enter, type, enter
 * Reorder and move to-do items between lists with ease by dragging them
