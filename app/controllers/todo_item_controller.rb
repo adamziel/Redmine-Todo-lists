@@ -1,9 +1,11 @@
 class TodoItemController < ApplicationController
   unloadable
 
+  before_filter :find_project
+  before_filter :check_permissions
   before_filter :find_todo_list, :only => :create
   before_filter :find_todo_item, :only => [:toggle, :update, :delete]
-  before_filter :init_journal, :find_project
+  before_filter :init_journal
 
   def create
     (render_403; return false) unless User.current.allowed_to?(:create_todos, @project)
@@ -125,6 +127,10 @@ class TodoItemController < ApplicationController
     @project = Project.find(params[:project_id])
   rescue ActiveRecord::RecordNotFound
     render_404
+  end
+
+  def check_permissions
+    (render_403; return false) unless User.current.allowed_to? :view_todo_lists, @project
   end
 
 end

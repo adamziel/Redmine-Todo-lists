@@ -3,6 +3,7 @@ class TodoListController < ApplicationController
 
   before_filter :find_settings
   before_filter :find_project
+  before_filter :check_permissions
   before_filter :find_todo_list, :only => [:done, :update, :delete]
 
   def index
@@ -93,6 +94,10 @@ class TodoListController < ApplicationController
   end
 
   private
+
+  def check_permissions
+    (render_403; return false) unless User.current.allowed_to? :view_todo_lists, @project
+  end
 
   def find_todo_list
     @todo_list = TodoList.where(:id => params[:id], :project_id=>@project.id).first
