@@ -17,7 +17,7 @@ class TodoItemController < ApplicationController
     end
 
     begin
-      tracker = @project.trackers.find(settings[:default_tracker] || (params && params[:tracker_id]) || :first)
+      tracker = @project.trackers.find((params && params[:tracker_id]) || settings[:default_tracker] || :first)
     rescue ActiveRecord::RecordNotFound
       return render :status=>500, :json => {:success => false, :message => l(:error_no_tracker_in_project) }
     end
