@@ -189,46 +189,48 @@ due-assignee-pill > .pill .form .ui-datepicker-inline {
   padding: 6px 8px 6px 14px;
   background: #FFF;
 }
-.controller-todo_list #todos_container ol.todo_lists > li.ui-sortable-helper > header > aside,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li.ui-sortable-helper > header > aside {
-  display: none;
+.controller-todo_list #todos_container ol.todo_lists > li.ui-sortable-helper > header .asideContainer aside,
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li.ui-sortable-helper > .asideContainer aside {
+  display: none !important;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside {
+.controller-todo_list #todos_container ol.todo_lists > li .asideContainer {
   position: absolute;
   top: 0;
-  left: -60px;
-  display: none;
-  width: 60px;
+  left: -100px;
+  width: 100px;
   height: 1.3em;
-  padding: 1px 0 1px 3px;
+}
+.controller-todo_list #todos_container ol.todo_lists > li .asideContainer aside {
+  display: none;
+  float: right;
+  height: 1.3em;
+  padding: 1px 4px 1px 3px;
   border: 0;
   background: #FFF;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
   box-shadow: -3px 0 3px #cccccc;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside .edit,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside .edit {
+.controller-todo_list #todos_container ol.todo_lists > li .asideContainer aside .edit {
   display: inline-block;
   color: #000;
   font-size: 11px;
-  line-height: 100%;
+  line-height: 120%;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside .edit:hover,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside .edit:hover {
+.controller-todo_list #todos_container ol.todo_lists > li .asideContainer aside .edit:hover {
   color: #005782;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside .delete,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside .delete {
+.controller-todo_list #todos_container ol.todo_lists > li .asideContainer aside .delete {
+  position: relative;
+  top: -1px;
   display: inline-block;
   background: url(/images/delete.png) 0 0 no-repeat;
   width: 16px;
   height: 16px;
   text-indent: -20000px;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header:hover > aside,
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside.visible {
+.controller-todo_list #todos_container ol.todo_lists > li > header:hover .asideContainer aside,
+.controller-todo_list #todos_container ol.todo_lists > li > header .asideContainer aside.visible {
   display: block;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > header {
@@ -251,9 +253,9 @@ due-assignee-pill > .pill .form .ui-datepicker-inline {
 .controller-todo_list #todos_container ol.todo_lists > li > header todo-resource-edit-form footer span {
   margin-left: -2px;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > header > aside {
+.controller-todo_list #todos_container ol.todo_lists > li > header > .asideContainer {
   top: 2px;
-  left: -63px;
+  left: -105px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list {
   padding-left: 20px;
@@ -293,7 +295,7 @@ due-assignee-pill > .pill .form .ui-datepicker-inline {
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol {
   min-height: 6px;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside,
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li .asideContainer aside,
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol.completed li,
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol.completed li a {
   color: #999;
@@ -302,12 +304,20 @@ due-assignee-pill > .pill .form .ui-datepicker-inline {
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li {
   margin: 2px 0 0 0;
 }
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li:hover > aside,
-.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > aside.visible {
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li:hover > .asideContainer > aside,
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > .asideContainer > aside.visible {
   display: block;
+}
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li:hover > .asideContainer > aside .delete,
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li > .asideContainer > aside.visible .delete {
+  position: relative;
+  top: -3px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li:hover .pill {
   display: inline-block;
+}
+.controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li.ui-sortable-placeholder {
+  height: 22px;
 }
 .controller-todo_list #todos_container ol.todo_lists > li > .todo_list > ol > li article [type=submit] {
   margin-left: 15px;

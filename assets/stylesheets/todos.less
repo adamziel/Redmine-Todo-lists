@@ -248,45 +248,51 @@ due-assignee-pill {
         padding: 6px 8px 6px 14px;
         background: #FFF;
 
-        &.ui-sortable-helper > header > aside,
-        > .todo_list > ol > li.ui-sortable-helper > header > aside {
-          display: none;
+        &.ui-sortable-helper > header .asideContainer aside,
+        > .todo_list > ol > li.ui-sortable-helper > .asideContainer aside {
+          display: none !important;
         }
 
-        > header > aside,
-        > .todo_list > ol > li > aside {
+        .asideContainer {
           position: absolute;
           top: 0;
-          left: -60px;
-          display: none;
-          width: 60px;
+          left: -100px;
+          width: 100px;
           height: 1.3em;
-          padding: 1px 0 1px 3px;
-          border: 0;
-          background: #FFF;
-          border-top-left-radius: 15px;
-          border-bottom-left-radius: 15px;
-          box-shadow: -3px 0 3px #ccc;
-          .edit {
-            display: inline-block;
-            color: #000;
-            font-size: 11px;
-            line-height: 100%;
-            &:hover {
-              color: @linkBlue;
+
+          aside {
+            display: none;
+            float: right;
+            height: 1.3em;
+            padding: 1px 4px 1px 3px;
+            border: 0;
+            background: #FFF;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            box-shadow: -3px 0 3px #ccc;
+            .edit {
+              display: inline-block;
+              color: #000;
+              font-size: 11px;
+              line-height: 120%;
+              &:hover {
+                color: @linkBlue;
+              }
             }
-          }
-          .delete {
-            display: inline-block;
-            background: url(/images/delete.png) 0 0 no-repeat;
-            width: 16px;
-            height: 16px;
-            text-indent: -20000px;
+            .delete {
+              position: relative;
+              top: -1px;
+              display: inline-block;
+              background: url(../images/delete.png) 0 0 no-repeat;
+              width: 16px;
+              height: 16px;
+              text-indent: -20000px;
+            }
           }
         }
 
-        > header:hover > aside,
-        > header > aside.visible {
+        > header:hover .asideContainer aside,
+        > header .asideContainer aside.visible {
           display: block;
         }
 
@@ -312,9 +318,9 @@ due-assignee-pill {
               margin-left: -2px;
             }
           }
-          > aside {
+          > .asideContainer {
             top: 2px;
-            left: -63px;
+            left: -105px;
           }
         }
         > .todo_list {
@@ -358,7 +364,7 @@ due-assignee-pill {
           > ol {
             min-height: 6px;
 
-            > li > aside,
+            > li .asideContainer aside,
             &.completed li,
             &.completed li a {
               color: #999;
@@ -368,9 +374,13 @@ due-assignee-pill {
             > li {
               margin: 2px 0 0 0;
 
-              &:hover > aside,
-              > aside.visible {
+              &:hover > .asideContainer > aside,
+              > .asideContainer > aside.visible {
                 display: block;
+                .delete {
+                  position: relative;
+                  top: -3px;
+                }
               }
 
               &:hover {

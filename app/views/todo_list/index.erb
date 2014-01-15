@@ -168,13 +168,15 @@
     <ol class="todo_lists" ui-sortable="sortableOptionsTodoList" ng-model="todoLists.data" ng-show="todoLists.data.length && isConfigured()">
         <li class="todo_list" ng-repeat="todoList in todoLists.data track by $index">
             <header>
-                <aside ng-show="hasAnyPermission('update_todo_lists', 'delete_todo_lists') && deleteTodoList != todoList.id">
-                  <span ng-click="deleteTodoList(todoList)" class="delete a-like" ng-show="hasAnyPermission('delete_todo_lists')"><%= l(:label_delete) %></span>
-                  <span ng-click="setState('editingTodoList', todoList.id)" class="edit a-like" ng-show="hasAnyPermission('update_todo_lists')"><%= l(:label_edit) %></span>
-                </aside>
-                <aside ng-show="deletingTodoList === todoList.id" class="visible indicator">
-                  Loading...
-                </aside>
+                <div class="asideContainer">
+                    <aside ng-show="hasAnyPermission('update_todo_lists', 'delete_todo_lists') && deleteTodoList != todoList.id">
+                      <span ng-click="deleteTodoList(todoList)" class="delete a-like" ng-show="hasAnyPermission('delete_todo_lists')"><%= l(:label_delete) %></span>
+                      <span ng-click="setState('editingTodoList', todoList.id)" class="edit a-like" ng-show="hasAnyPermission('update_todo_lists')"><%= l(:label_edit) %></span>
+                    </aside>
+                    <aside ng-show="deletingTodoList === todoList.id" class="visible indicator">
+                      Loading...
+                    </aside>
+                </div>
 
                 <span ng-hide="editingTodoList == todoList.id">
                     <h3>
@@ -198,14 +200,16 @@
             <article class="todo_list">
                 <ol ui-sortable="sortableOptionsTodoItem" ng-model="todoList.todo_items">
                     <li ng-repeat="todoItem in todoList.todo_items | filter:isTodoCompletedFactory(false) track by $index">
+                        <div class="asideContainer">
+                            <aside ng-show="hasAnyPermission('update_todos', 'delete_todos')">
+                              <span ng-click="deleteTodo(todoItem)" class="delete a-like" ng-show="hasAnyPermission('delete_todos')"><%= l(:label_delete) %></span>
+                              <span ng-click="setState('editingTodoItem', todoItem.id)" class="edit a-like" ng-show="hasAnyPermission('update_todos')"><%= l(:label_edit) %></span>
+                            </aside>
+                            <aside ng-show="deletingTodoItem === todoItem.id" class="visible indicator">
+                              Loading...
+                            </aside>
+                        </div>
 
-                        <aside ng-show="hasAnyPermission('update_todos', 'delete_todos')">
-                          <span ng-click="deleteTodo(todoItem)" class="delete a-like" ng-show="hasAnyPermission('delete_todos')"><%= l(:label_delete) %></span>
-                          <span ng-click="setState('editingTodoItem', todoItem.id)" class="edit a-like" ng-show="hasAnyPermission('update_todos')"><%= l(:label_edit) %></span>
-                        </aside>
-                        <aside ng-show="deletingTodoItem === todoItem.id" class="visible indicator">
-                          Loading...
-                        </aside>
                         <span ng-hide="editingTodoItem == todoItem.id">
                             <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
 
