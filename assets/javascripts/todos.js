@@ -573,6 +573,8 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
     };
 
     $scope.toggleTodoItem = function(todoItem) {
+        if(!permissions.update_todos) return;
+
         var completed = todoItem.completed;
         $http.post($filter('resolve')($scope.routes.toggle_todo, {':id': todoItem.id }), {
             completed: completed
@@ -606,14 +608,16 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
     $scope.sortableOptionsTodoList = {
         axis: 'y',
         handle: 'header',
-        stop: stopEventHandler
+        stop: stopEventHandler,
+        disabled: !$scope.permissions.update_todo_lists
     };
 
     $scope.sortableOptionsTodoItem = {
         axis: 'y',
         connectWith: ".todo_lists .todo_list > ol",
         handle: '.todoContents > a',
-        stop: stopEventHandler
+        stop: stopEventHandler,
+        disabled: !$scope.permissions.update_todos
     };
 
     $scope.findListById = function(id) {
