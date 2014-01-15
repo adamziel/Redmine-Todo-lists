@@ -573,7 +573,11 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
     };
 
     $scope.toggleTodoItem = function(todoItem) {
-        if(!permissions.update_todos) return;
+        if(!permissions.update_todos)
+        {
+            todoItem.completed = !todoItem.completed;
+            return;
+        }
 
         var completed = todoItem.completed;
         $http.post($filter('resolve')($scope.routes.toggle_todo, {':id': todoItem.id }), {

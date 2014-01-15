@@ -211,7 +211,7 @@
                         </div>
 
                         <span ng-hide="editingTodoItem == todoItem.id">
-                            <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" />
+                            <input type="checkbox" ng-click="toggleTodoItem(todoItem)" ng-model="todoItem.completed" ng-disabled="{{ !permissions.update_todos }}" />
 
                             <div class="todoContents">
                                 <a href="{{ routes.show_issue|resolve:{':issue_id': todoItem.issue_id} }}" ng-hide="todoItem.editMode.formVisible">
