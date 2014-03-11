@@ -16,7 +16,12 @@ class TodoListController < ApplicationController
 
     todo_lists = TodoList.where(:project_id=>@project.id)
     .where('todo_lists.is_private = false or todo_lists.author_id = ?', User.current.id)
-    .order("todo_lists.position").map do |i|
+
+    if params.key?(:list_id)
+      todo_lists = todo_lists.where(:id=>params[:list_id])
+    end
+
+    todo_lists = todo_lists.order("todo_lists.position").map do |i|
       a = i.attributes
       a['todo_items'] = []
       a

@@ -180,7 +180,7 @@
 
                 <span ng-hide="editingTodoList == todoList.id">
                     <h3>
-                      {{ todoList.subject }}
+                      <a href="?list_id={{ todoList.id }}">{{ todoList.subject }}</a>
                       <span class="padlock" ng-if="todoList.is_private"></span>
                     </h3>
                 </span>
