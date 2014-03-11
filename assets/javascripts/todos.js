@@ -164,6 +164,19 @@ angular
                 scope.isFormVisible = false;
                 scope.UsersManager = UsersManager
 
+                scope.hasPerm = function(permName)
+                {
+                    currentParent = scope;
+                    while(true)
+                    {
+                        if(currentParent.permissions)
+                        {
+                            return currentParent.permissions[permName];
+                        }
+                        currentParent = currentParent.$parent;
+                    }
+                };
+
                 var justSetDetails = false;
                 scope.$watch('isFormVisible', function(newV) {
                     if(newV)
@@ -308,7 +321,7 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
 
     Translator.setTranslations($window.translations);
     $scope.Translator = Translator;
-    $scope.permissions = $window.permissions;;
+    $scope.permissions = $window.permissions;
 
     $scope.completed_todo_status = $window.completed_todo_status;
     $scope.uncompleted_todo_status = $window.uncompleted_todo_status;

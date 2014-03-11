@@ -52,7 +52,7 @@
 <script type="text/ng-template" id="dueAssigneePill.html">
     <div class="pill" click-outside="isFormVisible=false">
       <span class="details" ng-class="(isFormVisible || saveInProgress ? ' active' : '')+(todoItem.due_date || todoItem.is_private || assignedToName() ? ' hasData' : ' empty')">
-        <span ng-hide="saveInProgress" ng-click="$parent.permissions.update_todos ? (isFormVisible = !isFormVisible) : false">
+        <span ng-hide="saveInProgress" ng-click="hasPerm('update_todos') ? (isFormVisible = !isFormVisible) : false">
             <span ng-show="todoItem.is_private" class="padlock"></span>
             <span ng-show="todoItem.due_date">{{ todoItem.due_date|date:"dd-MM-yyyy" }}</span>
             <span ng-show="!todoItem.due_date && !assignedToName()">{{ Translator.trans("unassigned") }}</span>
