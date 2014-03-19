@@ -4,7 +4,7 @@ This is a quick implementation of basecamp-like to-do lists. Every to-do item is
 
 ### Requirements
 
-1. Ruby 1.9+ (*should* work with 1.8 too, however there were [some issues reported](https://github.com/AZielinski/Redmine-Todo-lists/issues/34)
+1. Ruby 1.9+ (*should* work with 1.8 too, however there were [some issues reported](https://github.com/AZielinski/Redmine-Todo-lists/issues/34))
 1. PostgreSQL/MySQL/SQL Server (a few features are missing on SQL server though)
 
 ### Installation
