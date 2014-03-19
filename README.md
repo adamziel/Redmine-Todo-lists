@@ -2,6 +2,11 @@
 
 This is a quick implementation of basecamp-like to-do lists. Every to-do item is an "Issue" behind the scenes - this way you can track everything in the "Issues" tab: discuss, upload files, and so on.
 
+### Requirements
+
+1. Ruby 1.9+ (*should* work with 1.8 too, however there were [some issues reported](https://github.com/AZielinski/Redmine-Todo-lists/issues/34)
+1. PostgreSQL/MySQL/SQL Server (a few features are missing on SQL server though)
+
 ### Installation
 
 1. Clone this repo to plugins/ directory (so all files are in plugins/redmine_todos)
