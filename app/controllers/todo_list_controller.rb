@@ -12,7 +12,7 @@ class TodoListController < ApplicationController
     end
     # @settings[:completed_todo_status]
     # @settings[:uncompleted_todo_status]
-    @assignable_users_json = @project.users.to_json :only => [:id, :firstname, :lastname]
+    @assignable_users_json = @project.users.to_json(root: true, :only => [:id, :firstname, :lastname])
 
     todo_lists = TodoList.where(:project_id=>@project.id)
     .where('todo_lists.is_private = false or todo_lists.author_id = ?', User.current.id)

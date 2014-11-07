@@ -8,7 +8,6 @@ class TodoList < ActiveRecord::Base
              :foreign_key => :todo_list_id
 
   acts_as_list
-
   validates_presence_of :name
 
   def as_json(options=nil)
