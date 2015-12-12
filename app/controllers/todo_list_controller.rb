@@ -7,6 +7,7 @@ class TodoListController < ApplicationController
   before_filter :find_todo_list, :only => [:done, :update, :delete]
 
   def index
+    @trackers_json = @project.trackers.to_json :only => [:id, :name]
     if not @settings.include? :completed_todo_status
       @settings[:completed_todo_status] = -1
     end
@@ -150,7 +151,7 @@ class TodoListController < ApplicationController
         recently_completed = TodoItem.find_by_sql(
             %{
               select * from (
-                  select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, (
+                  select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, issues.tracker_id, (
                             CASE todo_items.todo_list_id
                             WHEN @curTLId THEN @curRow := @curRow + 1
                             ELSE @curRow := 1 AND @curTLId := todo_items.todo_list_id  END
@@ -173,7 +174,7 @@ class TodoListController < ApplicationController
             %{
               SELECT ranked_items.* FROM
               (
-                select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.due_date, rank() over (partition by todo_list_id order by updated_at desc)
+                select todo_items.*, issues.subject, issues.status_id, issues.assigned_to_id, issues.tracker_id, issues.due_date, rank() over (partition by todo_list_id order by updated_at desc)
                 from todo_items
                 LEFT JOIN issues on issues.id=todo_items.issue_id
                 WHERE issues.status_id = #{TodoItem.sanitize(@settings[:completed_todo_status])}

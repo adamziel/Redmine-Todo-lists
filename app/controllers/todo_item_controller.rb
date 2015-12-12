@@ -53,6 +53,9 @@ class TodoItemController < ApplicationController
         if params.include? :assigned_to_id_new
           @todo_item.issue.assigned_to_id = params[:assigned_to_id_new]
         end
+        if params.include? :tracker_id_new
+          @todo_item.issue.tracker_id = params[:tracker_id_new]
+        end
         if params.include? :due_date_new
           @todo_item.issue.due_date = params[:due_date_new] ? Time.parse(params[:due_date_new]) : nil
         end
