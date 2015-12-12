@@ -15,6 +15,9 @@ class TodoItemController < ApplicationController
     if not settings.include? :default_tracker
       settings[:default_tracker] = false
     end
+    if @project.default_tracker.to_s.present?
+      settings[:default_tracker] = @project.default_tracker
+    end
 
     begin
       tracker = @project.trackers.find((params && params[:tracker_id]) || settings[:default_tracker] || :first)
