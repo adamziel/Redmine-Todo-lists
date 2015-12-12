@@ -55,4 +55,5 @@ end
 Rails.application.config.to_prepare do
   ProjectsHelper.send(:include, RedmineTodos::Patches::ProjectsHelperPatchTodo)
   ProjectsController.send(:include, RedmineTodos::Patches::ProjectsControllerPatch)
+  Issue.send(:include, RedmineTodos::Patches::IssuePatch)
 end
