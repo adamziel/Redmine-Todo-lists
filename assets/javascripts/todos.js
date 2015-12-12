@@ -596,8 +596,15 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         $http.post($filter('resolve')($scope.routes.toggle_todo, {':id': todoItem.id }), {
             completed: completed
         }).success(function(response){
-            todoItem.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
-            todoItem.completed_at = (new Date(response.completed_at)).getTime();
+            if(response['success'])
+            {
+                todoItem.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
+                todoItem.completed_at = (new Date(response.completed_at)).getTime();
+            }
+            else
+            {
+                alert('Cannot save this update, please check the setting page')
+            }
         });
     };
     // }}

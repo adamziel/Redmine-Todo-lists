@@ -92,7 +92,7 @@ class TodoItemController < ApplicationController
       TodoItem.transaction do
         is_new = issue.id.nil?
         call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save, { :params => params, :issue => issue, :journal => @journal })
-        if issue.save!
+        if issue.save
           call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save, { :params => params, :issue => issue, :journal => @journal })
           if todo_item.id.nil?
             todo_item.issue_id = issue.id
@@ -101,10 +101,12 @@ class TodoItemController < ApplicationController
           if todo_item.save!
             return true
           end
+        else
+          return false
         end
       end
     end
-    return false
+    false
   end
 
   def find_todo_list
