@@ -21,7 +21,7 @@ module RedmineTodos
   module Hooks
     class ModelIssueHook < Redmine::Hook::ViewListener
       
-      def controller_issues_edit_after_save(context={})
+      def controller_issues_edit_after_save2(context={})
         update_todo_details(context)
       end
       
