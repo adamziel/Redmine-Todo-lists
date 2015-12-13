@@ -94,7 +94,7 @@ class TodoItemController < ApplicationController
     Issue.transaction do
       TodoItem.transaction do
         is_new = issue.id.nil?
-        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save, { :params => params, :issue => issue, :journal => @journal })
+        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save2, { :params => params, :issue => issue, :journal => @journal })
         if issue.save
           call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save2, { :params => params, :issue => issue, :journal => @journal })
           if todo_item.id.nil?
