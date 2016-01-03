@@ -21,7 +21,7 @@ module RedmineTodos
   module Hooks
     class ModelIssueHook < Redmine::Hook::ViewListener
       
-      def controller_issues_edit_after_save(context={})
+      def controller_issues_edit_after_save2(context={})
         update_todo_details(context)
       end
       
@@ -30,7 +30,7 @@ module RedmineTodos
         settings = Setting[:plugin_redmine_todos]
 
         params = context[:params]
-        if params && params[:issue] && settings.include?(:completed_todo_status)
+        if params && context[:issue] && settings.include?(:completed_todo_status)
 
           issue = context[:issue]
           todo_item = issue.todo_item
@@ -41,9 +41,9 @@ module RedmineTodos
             todo_item.completed_at = nil
           end
           if todo_item.completed_at.nil? and issue.status_id.to_s == settings[:completed_todo_status]
-            todo_item.completed_at = Time.now()
+            todo_item.completed_at = Time.now
           end
-          todo_item.save()
+          todo_item.save
         end
       end
 

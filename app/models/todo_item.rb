@@ -16,7 +16,8 @@ class TodoItem < ActiveRecord::Base
         :is_private => self.issue.is_private,
         :status_id => self.issue.status_id,
         :assigned_to_id => self.issue.assigned_to_id,
-        :due_date => self.issue.due_date
+        :due_date => self.issue.due_date,
+        :tracker_id => self.issue.tracker_id
     }
   end
 

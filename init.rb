@@ -50,3 +50,8 @@ Redmine::Plugin.register :redmine_todos do
   menu :project_menu, :todos, {:controller => 'todo_list', :action => 'index'}, :caption => :label_todo_plural, :param => :project_id
 
 end
+
+
+Rails.application.config.to_prepare do
+  Issue.send(:include, RedmineTodos::Patches::IssuePatch)
+end

@@ -15,6 +15,9 @@ class TodoItemController < ApplicationController
     if not settings.include? :default_tracker
       settings[:default_tracker] = false
     end
+    if @project.default_tracker.to_s.present?
+      settings[:default_tracker] = @project.default_tracker
+    end
 
     begin
       tracker = @project.trackers.find((params && params[:tracker_id]) || settings[:default_tracker] || :first)
@@ -49,6 +52,9 @@ class TodoItemController < ApplicationController
       elsif params[:saveMode] == "due_assignee"
         if params.include? :assigned_to_id_new
           @todo_item.issue.assigned_to_id = params[:assigned_to_id_new]
+        end
+        if params.include? :tracker_id_new
+          @todo_item.issue.tracker_id = params[:tracker_id_new]
         end
         if params.include? :due_date_new
           @todo_item.issue.due_date = params[:due_date_new] ? Time.parse(params[:due_date_new]) : nil
@@ -88,9 +94,9 @@ class TodoItemController < ApplicationController
     Issue.transaction do
       TodoItem.transaction do
         is_new = issue.id.nil?
-        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save, { :params => params, :issue => issue, :journal => @journal })
-        if issue.save!
-          call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save, { :params => params, :issue => issue, :journal => @journal })
+        call_hook(is_new ? :controller_issues_new_before_save : :controller_issues_edit_before_save2, { :params => params, :issue => issue, :journal => @journal })
+        if issue.save
+          call_hook(is_new ? :controller_issues_new_after_save : :controller_issues_edit_after_save2, { :params => params, :issue => issue, :journal => @journal })
           if todo_item.id.nil?
             todo_item.issue_id = issue.id
           end
@@ -98,10 +104,12 @@ class TodoItemController < ApplicationController
           if todo_item.save!
             return true
           end
+        else
+          return false
         end
       end
     end
-    return false
+    false
   end
 
   def find_todo_list

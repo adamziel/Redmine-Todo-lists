@@ -75,6 +75,29 @@ angular
             }
         }
     })
+    .service('TrackersManager', function(Translator) {
+        var trackers;
+        return {
+            set: function(trackersData) {
+                trackers = trackersData;
+            },
+            get: function() {
+                return trackers;
+            },
+            getOptions: function() {
+                return  trackers;
+            },
+            getById: function(id) {
+                for(u in trackers)
+                {
+                    if(trackers[u].id == id)
+                    {
+                        return trackers[u];
+                    }
+                }
+            }
+        }
+    })
 
     .directive('clickOutside', function($document){
         return {
@@ -144,7 +167,7 @@ angular
         };
     })
 
-    .directive('dueAssigneePill', function($window, $parse, $timeout, Translator, UsersManager, Registry) {
+    .directive('dueAssigneePill', function($window, $parse, $timeout, Translator, UsersManager, TrackersManager, Registry) {
         return {
             restrict: "E",
             template: $window.dueAssigneePillTemplate,
@@ -162,7 +185,8 @@ angular
                 scope.Translator = Translator;
                 scope.saveInProgress = false;
                 scope.isFormVisible = false;
-                scope.UsersManager = UsersManager
+                scope.UsersManager = UsersManager;
+                scope.TrackersManager = TrackersManager;
 
                 scope.hasPerm = function(permName)
                 {
@@ -187,6 +211,7 @@ angular
                             scope.todoItem.due_date_new = scope.todoItem.due_date;
                             scope.todoItem.assigned_to_id_new = scope.todoItem.assigned_to_id;
                             scope.todoItem.is_private_new = scope.todoItem.is_private;
+                            scope.todoItem.tracker_id_new = scope.todoItem.tracker_id;
                         }
                         if(justSetDetails)
                         {
@@ -198,12 +223,13 @@ angular
                 });
 
                 var initializing = !forNewTodo;
-                scope.$watch('[todoItem.due_date_new, todoItem.assigned_to_id_new, todoItem.is_private_new]', function(newT, oldT) {
+                scope.$watch('[todoItem.due_date_new, todoItem.assigned_to_id_new, todoItem.is_private_new, todoItem.tracker_id_new]', function(newT, oldT) {
                     if(forNewTodo)
                     {
                         Registry.set('due_date_new', newT[0]);
                         Registry.set('assigned_to_id_new', newT[1]);
                         Registry.set('is_private_new', newT[2]);
+                        Registry.set('tracker_id_new', newT[3]);
                     }
                     if(initializing || justSetDetails || scope.saveInProgress)
                     {
@@ -232,11 +258,17 @@ angular
                         scope.todoItem.due_date = scope.todoItem.due_date_new;
                         scope.todoItem.assigned_to_id = scope.todoItem.assigned_to_id_new;
                         scope.todoItem.is_private = scope.todoItem.is_private_new;
+                        scope.todoItem.tracker_id = scope.todoItem.tracker_id_new;
                     }
                 }, true);
                 scope.assignedToName = function() {
                     var user = UsersManager.getById(scope.todoItem.assigned_to_id);
                     return user ? user.name : "";
+                };
+                scope.trackerToName = function() {
+                    //alert(scope.todoItem.tracker_id)
+                    var tracker = TrackersManager.getById(scope.todoItem.tracker_id);
+                    return tracker ? tracker.name : "-";
                 };
             }
         };
@@ -294,7 +326,7 @@ angular
     })
 ;
 
-function TodoListController($scope, $window, $timeout, $filter, $http, $log, $resource, Translator, UsersManager, Registry)
+function TodoListController($scope, $window, $timeout, $filter, $http, $log, $resource, Translator, UsersManager, TrackersManager, Registry)
 {
     window.scope = $scope; // just for easier debugging
     
@@ -334,6 +366,13 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         };
     }));
 
+    TrackersManager.set($window.trackers.map(function(data){
+        return {
+            id: data.tracker.id,
+            name: data.tracker.name
+        };
+    }));
+
     $scope.isConfigured = function() {
         return $scope.completed_todo_status && $scope.uncompleted_todo_status;
     };
@@ -352,6 +391,8 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
             this.todoItem.assigned_to_id_new = userId || Registry.get('assigned_to_id_new')
             this.todoItem.is_private = Registry.get('is_private_new')
             this.todoItem.is_private_new = Registry.get('is_private_new')
+            this.todoItem.tracker_id = Registry.get('tracker_id_new')
+            this.todoItem.tracker_id_new = Registry.get('tracker_id_new')
         }
     };
     $scope.prospects.recreateTodoItem(UsersManager.getCurrentUserId());
@@ -596,8 +637,15 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
         $http.post($filter('resolve')($scope.routes.toggle_todo, {':id': todoItem.id }), {
             completed: completed
         }).success(function(response){
-            todoItem.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
-            todoItem.completed_at = (new Date(response.completed_at)).getTime();
+            if(response['success'])
+            {
+                todoItem.status_id = completed ? $scope.completed_todo_status : $scope.uncompleted_todo_status;
+                todoItem.completed_at = (new Date(response.completed_at)).getTime();
+            }
+            else
+            {
+                alert('Cannot save this update, please check the setting page')
+            }
         });
     };
     // }}
@@ -676,4 +724,3 @@ function TodoListController($scope, $window, $timeout, $filter, $http, $log, $re
     // }}
 
 };
-
