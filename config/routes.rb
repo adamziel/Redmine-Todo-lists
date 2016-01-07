@@ -11,4 +11,3 @@
  match "projects/:project_id/todos/item/:id" => 'todo_item#delete',   :via => [:delete]
 
  match "projects/:project_id/todos/item/toggle/:id" => 'todo_item#toggle',  :via => [:post]
- match "projects/:id/settings/save_default_tracker" => 'projects#save_default_tracker',  :via => [:post]
