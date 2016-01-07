@@ -14,4 +14,9 @@ module RedmineTodos
 
     end
   end
+end  
+
+
+unless Issue.included_modules.include?(RedmineTodos::Patches::IssuePatch)
+  Issue.send(:include, RedmineTodos::Patches::IssuePatch)
 end

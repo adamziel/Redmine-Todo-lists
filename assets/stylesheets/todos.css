@@ -113,13 +113,6 @@ due-assignee-pill > .pill .form > section.assignee select {
   width: 100%;
   margin-top: 0;
 }
-due-assignee-pill > .pill .form > section.tracker b {
-  border-bottom: 0;
-}
-due-assignee-pill > .pill .form > section.tracker select {
-  width: 100%;
-  margin-top: 0;
-}
 due-assignee-pill > .pill .form > section.due .nodue {
   display: block;
   margin-top: 10px;
