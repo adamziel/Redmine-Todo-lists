@@ -12,7 +12,7 @@ class TodoListController < ApplicationController
     end
     # @settings[:completed_todo_status]
     # @settings[:uncompleted_todo_status]
-    @assignable_users_json = @project.users.to_json :only => [:id, :firstname, :lastname]
+    @assignable_users_json = @project.users.to_json(root: true, :only => [:id, :firstname, :lastname])
 
     todo_lists = TodoList.where(:project_id=>@project.id)
     .where('todo_lists.is_private = false or todo_lists.author_id = ?', User.current.id)
@@ -27,20 +27,23 @@ class TodoListController < ApplicationController
       a
     end
     todo_lists_ids = todo_lists.map { |tl| tl['id'] }
-    TodoItem.where('issues.status_id != ?', @settings[:completed_todo_status])
-    .where('issues.is_private = false or issues.assigned_to_id = ? or issues.author_id = ?', User.current.id, User.current.id)
-    .where('todo_items.todo_list_id in (?)', todo_lists_ids)
-    .includes(:issue)
-    .order('todo_items.position')
-    .select('*')
-    .each do |item|
-      for todo_list in todo_lists
-        if todo_list['id'] == item.todo_list_id
-          (todo_list['todo_items'] ||= []) << item.as_json
-          break
-        end
-      end
-    end
+
+    TodoItem.joins(:issue)
+            .where('issues.status_id != ?', @settings[:completed_todo_status])
+            .where('issues.is_private = false or issues.assigned_to_id = ? or issues.author_id = ?', User.current.id, User.current.id)
+            .where('todo_items.todo_list_id in (?)', todo_lists_ids)
+            .includes(:issue)
+            .order('todo_items.position')
+            .select('*')
+            .each do |item|
+              for todo_list in todo_lists
+                if todo_list['id'] == item.todo_list_id
+                  (todo_list['todo_items'] ||= []) << item.as_json
+                  break
+                end
+              end
+            end
+
     @todo_lists_json = todo_lists.to_json
 
     @comments_nbs = self.find_comments_nbs
