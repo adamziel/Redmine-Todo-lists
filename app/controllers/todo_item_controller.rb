@@ -36,6 +36,19 @@ class TodoItemController < ApplicationController
     @issue.project = @project
     @issue.tracker = tracker
 
+    # If user input started from # try to substitute by an existing issue
+    if @issue.subject.start_with?('#') == true
+      issue_id_str = @issue.subject.dup
+      issue_id_str[0]=''
+      issue_id = issue_id_str.to_i
+      if issue_id.to_s == issue_id_str
+        issue_try = Issue.visible.where(:id => issue_id).first
+        unless issue_try.nil?
+          @issue = issue_try
+        end
+      end
+    end
+    
     todo_item = TodoItem.new(:todo_list_id=> @todo_list.id)
     success = self.do_save(todo_item, @issue)
     render :json => {:success => success}.merge(todo_item.as_json)

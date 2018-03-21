@@ -33,6 +33,7 @@ Why don't you star this repo? It is great way to say "I like this thing!"
 * Private to-dos and to-do lists
 * Very friendly Ajax UI - heavily inspired by basecamp and created with Angular.js
 * Enter To-do items as simple as: type, enter, type, enter
+* Add an existing issue to your To-do list by typing `#` and issue number
 * Reorder and move to-do items between lists with ease by dragging them
 * Reorder to-do lists by dragging them
 * Assign items to users and set due dates with a few clicks right from the list
