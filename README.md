@@ -1,3 +1,5 @@
+## Unfortunately I am not actively maintaining this plugin. I'd love to accept any Pull Requests that makes it better in any way!
+
 ### Todo Lists for Redmine
 
 This is a quick implementation of basecamp-like to-do lists. Every to-do item is an "Issue" behind the scenes - this way you can track everything in the "Issues" tab: discuss, upload files, and so on.
