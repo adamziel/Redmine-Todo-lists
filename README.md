@@ -1,4 +1,4 @@
-## Unfortunately I am not actively maintaining this plugin. I'd love to accept any Pull Requests that makes it better in any way!
+## Unfortunately I am not actively maintaining this plugin. I'd love to accept any Pull Request that makes it better in any way!
 
 ### Todo Lists for Redmine
 
@@ -54,7 +54,7 @@ Why don't you star this repo? It is great way to say "I like this thing!"
 
 * 0% test coverage
 * Works with MySQL and PostgreSQL
-* Tested only under firefox 23 and chrome 28 - it probably won't work well with IE (especially that angular.js is involved and no compability changes were performed)
+* Tested only under firefox 23 and chrome 28 - it probably won't work well with IE (especially since angular.js is involved and no compability changes were performed)
 * Info for devs: I noticed that on dev server (WEBrick) managing issues sometimes results with an error 500 (error message points me to some other plugin I have). There are no problems on production server though.
 
 ### Disclaimer
